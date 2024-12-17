@@ -7,7 +7,9 @@ public class UIScaler : MonoBehaviour
 {
 
     public Text[] buttonText;
-    public int screenSizeDivider=50;
+    public Text coinsText, coinsNum;
+    public int screenSizeDivider=50; 
+    public float coinsTextSize=1.8f;
     private int previousHeight;
 
     void Start()
@@ -34,5 +36,8 @@ public class UIScaler : MonoBehaviour
         foreach (Text buttonText in buttonText){
             buttonText.fontSize = textSize;
         }
+
+        coinsText.fontSize = (int)(textSize*coinsTextSize);
+        coinsNum.fontSize = (int)(textSize*coinsTextSize);
     }
 }
