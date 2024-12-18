@@ -11,6 +11,7 @@ public class UIScaler : MonoBehaviour
     public int screenSizeDivider=50; 
     public float coinsTextSize=1.8f;
     private int previousHeight;
+    //public static int curTextSize;
 
     void Start()
     {
@@ -39,5 +40,6 @@ public class UIScaler : MonoBehaviour
 
         coinsText.fontSize = (int)(textSize*coinsTextSize);
         coinsNum.fontSize = (int)(textSize*coinsTextSize);
+        //curTextSize=(int)(textSize*coinsTextSize);
     }
 }
