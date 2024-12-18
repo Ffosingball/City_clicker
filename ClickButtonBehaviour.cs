@@ -11,12 +11,6 @@ public class ClickButtonBehaviour : MonoBehaviour
     public float textSpeedMovement=50, textDistanceMove=100;
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        coinsNum.text = "0";
-    }
-
     // Update is called once per frame
     /*void Update()
     {
@@ -30,7 +24,6 @@ public class ClickButtonBehaviour : MonoBehaviour
     public void increaseBalance()
     {
         Balance.updateBalance();
-        coinsNum.text=""+Balance.getBalance();
 
         RectTransform rectTransform = mainButton.GetComponent<RectTransform>();
         Vector3 worldCenter = rectTransform.TransformPoint(rectTransform.rect.center);
