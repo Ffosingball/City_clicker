@@ -46,8 +46,8 @@ public class UIManager : MonoBehaviour
         currentPanel=sidePanels[3];
     }
 
-    public static void updateText(int n)
+    public static void updateText(float n)
     {
-        balanceText.text = n.ToString();
+        balanceText.text = Balance.outputCostCorrectly(n);
     }
 }

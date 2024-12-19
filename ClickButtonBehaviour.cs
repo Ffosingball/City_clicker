@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class ClickButtonBehaviour : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class ClickButtonBehaviour : MonoBehaviour
 
     public void increaseBalance()
     {
-        Balance.updateBalance();
+        float increasedBy = Balance.updateBalance();
 
         RectTransform rectTransform = mainButton.GetComponent<RectTransform>();
         Vector3 worldCenter = rectTransform.TransformPoint(rectTransform.rect.center);
@@ -41,7 +42,7 @@ public class ClickButtonBehaviour : MonoBehaviour
             Debug.Log("Null");
         else
         {
-            textNeeded.text="+"+(int)((1+Balance.getAdder())*Balance.getMultiplier());
+            textNeeded.text="+"+Balance.outputCostCorrectly((float)Math.Round(increasedBy));
             StartCoroutine(moveText(movingTextCur));
         }
     }

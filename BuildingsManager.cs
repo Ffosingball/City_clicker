@@ -48,7 +48,7 @@ public class BuildingsManager : MonoBehaviour
         Balance.updateBalance(houseCost);
         Balance.updateAdder(adderIncrease);
         houseCost=(int)(houseCost*costMultiplier);
-        houseText.text="\n"+houseCost;
+        houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
         createHouseStructure();
     }
 
@@ -58,7 +58,7 @@ public class BuildingsManager : MonoBehaviour
         Balance.updateBalance(roadCost);
         Balance.updateMultiplier(multiplierIncrease);
         roadCost=(int)(roadCost*costMultiplier);
-        roadText.text="\n"+roadCost;
+        roadText.text="\n"+Balance.outputCostCorrectly(roadCost);
         createRoadStructure();
     }
 
