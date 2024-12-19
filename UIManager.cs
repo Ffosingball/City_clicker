@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public GameObject[] sidePanels;
+    public GameObject mainPanel, hidedPanel;
     private GameObject currentPanel;
     private static Text balanceText;
     public Text balanceTextNonStatic;
@@ -44,6 +45,20 @@ public class UIManager : MonoBehaviour
         currentPanel.SetActive(false);
         sidePanels[3].SetActive(true);
         currentPanel=sidePanels[3];
+    }
+
+    public void hideUIButton()
+    {
+        currentPanel.SetActive(false);
+        mainPanel.SetActive(false);
+        hidedPanel.SetActive(true);
+    }
+
+    public void showUIButton()
+    {
+        hidedPanel.SetActive(false);
+        currentPanel.SetActive(true);
+        mainPanel.SetActive(true);
     }
 
     public static void updateText(float n)

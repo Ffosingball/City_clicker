@@ -2,18 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class BuildingsManager : MonoBehaviour
 {
-    private List<Structure> allStructuresList;
-    public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f;
-    public int houseCost=20, roadCost=40, craftCost=80;
+    private List<Structure> allStructuresList, allBuildings;
+    private Dictionary<string, List<GameObject>> allRoadsList;
+    private int outsideRoads=0;
+    public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfTheCornerRoad=0.4f;
+    public int houseCost=20, roadCost=40, craftCost=80, outsideRoadsLimit=5, roadLength=5;
     public Text houseText, roadText, craftText;
     public Button houseButton, roadButton, craftButton;
+    public GameObject[] houses;
+    public GameObject[] roadTypes;
+    public GameObject[] craftBuildings;
 
     private void Start()
     {
         allStructuresList = new List<Structure>();
+        allBuildings = new List<Structure>();
+        allRoadsList = new Dictionary<string, List<GameObject>>();
 
         houseText.text="\n"+houseCost;
         roadText.text="\n"+roadCost;
@@ -31,7 +39,7 @@ public class BuildingsManager : MonoBehaviour
         else
             houseButton.interactable = false;
 
-        if(Balance.getBalance()>=roadCost)
+        if(Balance.getBalance()>=roadCost && allRoadsList.Count<2*allBuildings.Count)
             roadButton.interactable = true;
         else
             roadButton.interactable = false;
@@ -63,7 +71,172 @@ public class BuildingsManager : MonoBehaviour
     }
 
 
-    private void createHouseStructure(){}
+    private void createHouseStructure()
+    {
+        int y = UnityEngine.Random.Range(-500,501);
+        int x = UnityEngine.Random.Range(-1000,1001);
+        int houseNum = UnityEngine.Random.Range(0,houses.Length);
 
-    private void createRoadStructure(){}
+        GameObject newHouse = Instantiate(houses[houseNum], new Vector3(x,y,y+500), Quaternion.Euler(0f,0f,0f));
+        Structure newStruct = new Structure(newHouse,y,x,"House");
+        allStructuresList.Add(newStruct);
+        allBuildings.Add(newStruct);
+    }
+
+    private void createRoadStructure()
+    {
+        if(allBuildings.Count==1)
+        {
+            createOutsideRoad(allBuildings[0].getX(), allBuildings[0].getY(), 0);
+        }
+        else if(UnityEngine.Random.Range(0, 10)==1 && outsideRoads<outsideRoadsLimit)
+        {
+            int index = UnityEngine.Random.Range(0,allBuildings.Count);
+            createOutsideRoad(allBuildings[index].getX(), allBuildings[index].getY(), index);
+        }
+        else
+        {
+            if(allRoadsList.Count==0)
+            {
+                int index1 = UnityEngine.Random.Range(0,allBuildings.Count);
+                int index2 = UnityEngine.Random.Range(0,allBuildings.Count);
+
+                while(index1==index2)
+                {
+                    index1 = UnityEngine.Random.Range(0,allBuildings.Count);
+                    index2 = UnityEngine.Random.Range(0,allBuildings.Count);
+                }
+
+                createInnerRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
+            }
+            else
+            {
+                int index1 = UnityEngine.Random.Range(0,allBuildings.Count);
+                int index2 = UnityEngine.Random.Range(0,allBuildings.Count);
+
+                int repeat=0;
+                while((index1==index2 || allRoadsList.ContainsKey(index1+index2+"") || allRoadsList.ContainsKey(index2+index1+"")) && repeat<10)
+                {
+                    index1 = UnityEngine.Random.Range(0,allBuildings.Count);
+                    index2 = UnityEngine.Random.Range(0,allBuildings.Count);
+                    repeat++;
+                }
+
+                createInnerRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
+            }
+        }
+    }
+
+
+    private void createOutsideRoad(int x, int y, int i1)
+    {
+        outsideRoads++;
+        switch(UnityEngine.Random.Range(1,4))
+        {
+            case 1:
+                createInnerRoad(x,y,-1100,UnityEngine.Random.Range(-600,600),i1,-1);
+                break;
+            case 2:
+                createInnerRoad(x,y,UnityEngine.Random.Range(-1100,1100),600,i1,-1);
+                break;
+            case 3:
+                createInnerRoad(x,y,1100,UnityEngine.Random.Range(-600,600),i1,-1);
+                break;
+            case 4:
+                createInnerRoad(x,y,UnityEngine.Random.Range(-1100,1100),-600,i1,-1);
+                break;
+        }
+    }
+
+
+    private void createInnerRoad(int x1, int y1, int x2, int y2, int i1, int i2)
+    {
+        List<GameObject> tempPartsOfRoad = new List<GameObject>();
+
+        if(UnityEngine.Random.Range(0f,1f)<probabilityOfTheCornerRoad)
+        {
+            if(UnityEngine.Random.Range(0,2)==0)
+            {
+                if(Math.Abs(y1-y2)>roadLength)
+                {
+                    int multiplier=1;
+                    if(y1>y2)
+                        multiplier=-1;
+                    
+                    int curY=y1;
+                    while(Math.Abs(curY-y2)>roadLength)
+                    {
+                        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1,curY,curY+500), Quaternion.Euler(0f,0f,0f));
+                        tempPartsOfRoad.Add(newPart);
+                        allStructuresList.Add(new Structure(newPart,x1,curY,"RoadPart"));
+                        curY+=5*multiplier;
+                    }
+
+                    y1=curY;
+                }
+
+                if(Math.Abs(x1-x2)>roadLength)
+                {
+                    int multiplier=1;
+                    if(x1>x2)
+                        multiplier=-1;
+                    
+                    int curX=x1;
+                    while(Math.Abs(curX-x2)>roadLength)
+                    {
+                        GameObject newPart = Instantiate(roadTypes[0], new Vector3(curX,y1,y1+500), Quaternion.Euler(0f,0f,0f));
+                        tempPartsOfRoad.Add(newPart);
+                        allStructuresList.Add(new Structure(newPart,curX,y1,"RoadPart"));
+                        curX+=5*multiplier;
+                    }
+
+                    x1=curX;
+                }
+            }
+            else
+            {
+                if(Math.Abs(x1-x2)>roadLength)
+                {
+                    int multiplier=1;
+                    if(x1>x2)
+                        multiplier=-1;
+                    
+                    int curX=x1;
+                    while(Math.Abs(curX-x2)>roadLength)
+                    {
+                        GameObject newPart = Instantiate(roadTypes[0], new Vector3(curX,y1,y1+500), Quaternion.Euler(0f,0f,0f));
+                        tempPartsOfRoad.Add(newPart);
+                        allStructuresList.Add(new Structure(newPart,curX,y1,"RoadPart"));
+                        curX+=5*multiplier;
+                    }
+
+                    x1=curX;
+                }
+
+                if(Math.Abs(y1-y2)>roadLength)
+                {
+                    int multiplier=1;
+                    if(y1>y2)
+                        multiplier=-1;
+                    
+                    int curY=y1;
+                    while(Math.Abs(curY-y2)>roadLength)
+                    {
+                        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1,curY,curY+500), Quaternion.Euler(0f,0f,0f));
+                        tempPartsOfRoad.Add(newPart);
+                        allStructuresList.Add(new Structure(newPart,x1,curY,"RoadPart"));
+                        curY+=5*multiplier;
+                    }
+
+                    y1=curY;
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Unusual road!");
+        }
+
+        allRoadsList.Add(i1+i2+"",tempPartsOfRoad);
+    }
 }
