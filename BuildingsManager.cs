@@ -77,8 +77,8 @@ public class BuildingsManager : MonoBehaviour
         int x = UnityEngine.Random.Range(-1000,1001);
         int houseNum = UnityEngine.Random.Range(0,houses.Length);
 
-        GameObject newHouse = Instantiate(houses[houseNum], new Vector3(x,y,y+500), Quaternion.Euler(0f,0f,0f));
-        Structure newStruct = new Structure(newHouse,y,x,"House");
+        GameObject newHouse = Instantiate(houses[houseNum], new Vector3(x,y,1000-(y+500)), Quaternion.Euler(0f,0f,0f));
+        Structure newStruct = new Structure(newHouse,x,y,"House");
         allStructuresList.Add(newStruct);
         allBuildings.Add(newStruct);
     }
@@ -115,14 +115,17 @@ public class BuildingsManager : MonoBehaviour
                 int index2 = UnityEngine.Random.Range(0,allBuildings.Count);
 
                 int repeat=0;
-                while((index1==index2 || allRoadsList.ContainsKey(index1+index2+"") || allRoadsList.ContainsKey(index2+index1+"")) && repeat<10)
+                while((index1==index2 || allRoadsList.ContainsKey(index1+""+index2+"") || allRoadsList.ContainsKey(index2+""+index1+"")) && repeat<10)
                 {
                     index1 = UnityEngine.Random.Range(0,allBuildings.Count);
                     index2 = UnityEngine.Random.Range(0,allBuildings.Count);
                     repeat++;
                 }
 
-                createInnerRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
+                if(allRoadsList.ContainsKey(index1+""+index2+"") || allRoadsList.ContainsKey(index2+""+index1+""))
+                    createOutsideRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), index1);
+                else
+                    createInnerRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
             }
         }
     }
@@ -134,16 +137,16 @@ public class BuildingsManager : MonoBehaviour
         switch(UnityEngine.Random.Range(1,4))
         {
             case 1:
-                createInnerRoad(x,y,-1100,UnityEngine.Random.Range(-600,600),i1,-1);
+                createInnerRoad(x,y,-1100,UnityEngine.Random.Range(-600,600),i1,-outsideRoads);
                 break;
             case 2:
-                createInnerRoad(x,y,UnityEngine.Random.Range(-1100,1100),600,i1,-1);
+                createInnerRoad(x,y,UnityEngine.Random.Range(-1100,1100),600,i1,-outsideRoads);
                 break;
             case 3:
-                createInnerRoad(x,y,1100,UnityEngine.Random.Range(-600,600),i1,-1);
+                createInnerRoad(x,y,1100,UnityEngine.Random.Range(-600,600),i1,-outsideRoads);
                 break;
             case 4:
-                createInnerRoad(x,y,UnityEngine.Random.Range(-1100,1100),-600,i1,-1);
+                createInnerRoad(x,y,UnityEngine.Random.Range(-1100,1100),-600,i1,-outsideRoads);
                 break;
         }
     }
@@ -152,83 +155,72 @@ public class BuildingsManager : MonoBehaviour
     private void createInnerRoad(int x1, int y1, int x2, int y2, int i1, int i2)
     {
         List<GameObject> tempPartsOfRoad = new List<GameObject>();
+        //Debug.Log("Coord1: "+x1+", "+y1+"; Coord2: "+x2+", "+y2+"; ids: "+i1+", "+i2);
 
         if(UnityEngine.Random.Range(0f,1f)<probabilityOfTheCornerRoad)
         {
             if(UnityEngine.Random.Range(0,2)==0)
             {
-                if(Math.Abs(y1-y2)>roadLength)
+                if(y1>y2)
                 {
-                    int multiplier=1;
-                    if(y1>y2)
-                        multiplier=-1;
-                    
-                    int curY=y1;
-                    while(Math.Abs(curY-y2)>roadLength)
-                    {
-                        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1,curY,curY+500), Quaternion.Euler(0f,0f,0f));
-                        tempPartsOfRoad.Add(newPart);
-                        allStructuresList.Add(new Structure(newPart,x1,curY,"RoadPart"));
-                        curY+=5*multiplier;
-                    }
-
-                    y1=curY;
+                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1,y1-(Math.Abs(y1-y2)/2),1001-(y2+500)), Quaternion.Euler(0f,0f,0f));
+                    newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
+                    tempPartsOfRoad.Add(newPart);
+                    allStructuresList.Add(new Structure(newPart,x1,y1-(Math.Abs(y1-y2)/2),"RoadPart"));
+                }
+                else
+                {
+                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1,y1+(Math.Abs(y1-y2)/2),1001-(y1+500)), Quaternion.Euler(0f,0f,0f));
+                    newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
+                    tempPartsOfRoad.Add(newPart);
+                    allStructuresList.Add(new Structure(newPart,x1,y1+(Math.Abs(y1-y2)/2),"RoadPart"));
                 }
 
-                if(Math.Abs(x1-x2)>roadLength)
+                if(x1>x2)
                 {
-                    int multiplier=1;
-                    if(x1>x2)
-                        multiplier=-1;
-                    
-                    int curX=x1;
-                    while(Math.Abs(curX-x2)>roadLength)
-                    {
-                        GameObject newPart = Instantiate(roadTypes[0], new Vector3(curX,y1,y1+500), Quaternion.Euler(0f,0f,0f));
-                        tempPartsOfRoad.Add(newPart);
-                        allStructuresList.Add(new Structure(newPart,curX,y1,"RoadPart"));
-                        curX+=5*multiplier;
-                    }
-
-                    x1=curX;
+                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1-(Math.Abs(x1-x2)/2),y2,1001-(y2+500)), Quaternion.Euler(0f,0f,0f));
+                    newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
+                    tempPartsOfRoad.Add(newPart);
+                    allStructuresList.Add(new Structure(newPart,x1-(Math.Abs(x1-x2)/2),y2,"RoadPart"));
+                }
+                else
+                {
+                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1+(Math.Abs(x1-x2)/2),y2,1001-(y2+500)), Quaternion.Euler(0f,0f,0f));
+                    newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
+                    tempPartsOfRoad.Add(newPart);
+                    allStructuresList.Add(new Structure(newPart,x1+(Math.Abs(x1-x2)/2),y2,"RoadPart"));
                 }
             }
             else
             {
-                if(Math.Abs(x1-x2)>roadLength)
+                if(x1>x2)
                 {
-                    int multiplier=1;
-                    if(x1>x2)
-                        multiplier=-1;
-                    
-                    int curX=x1;
-                    while(Math.Abs(curX-x2)>roadLength)
-                    {
-                        GameObject newPart = Instantiate(roadTypes[0], new Vector3(curX,y1,y1+500), Quaternion.Euler(0f,0f,0f));
-                        tempPartsOfRoad.Add(newPart);
-                        allStructuresList.Add(new Structure(newPart,curX,y1,"RoadPart"));
-                        curX+=5*multiplier;
-                    }
-
-                    x1=curX;
+                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1-(Math.Abs(x1-x2)/2),y1,1001-(y1+500)), Quaternion.Euler(0f,0f,0f));
+                    newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
+                    tempPartsOfRoad.Add(newPart);
+                    allStructuresList.Add(new Structure(newPart,x1-(Math.Abs(x1-x2)/2),y1,"RoadPart"));
+                }
+                else
+                {
+                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1+(Math.Abs(x1-x2)/2),y1,1001-(y1+500)), Quaternion.Euler(0f,0f,0f));
+                    newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
+                    tempPartsOfRoad.Add(newPart);
+                    allStructuresList.Add(new Structure(newPart,x1+(Math.Abs(x1-x2)/2),y1,"RoadPart"));
                 }
 
-                if(Math.Abs(y1-y2)>roadLength)
+                if(y1>y2)
                 {
-                    int multiplier=1;
-                    if(y1>y2)
-                        multiplier=-1;
-                    
-                    int curY=y1;
-                    while(Math.Abs(curY-y2)>roadLength)
-                    {
-                        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1,curY,curY+500), Quaternion.Euler(0f,0f,0f));
-                        tempPartsOfRoad.Add(newPart);
-                        allStructuresList.Add(new Structure(newPart,x1,curY,"RoadPart"));
-                        curY+=5*multiplier;
-                    }
-
-                    y1=curY;
+                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x2,y1-(Math.Abs(y1-y2)/2),1001-(y2+500)), Quaternion.Euler(0f,0f,0f));
+                    newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
+                    tempPartsOfRoad.Add(newPart);
+                    allStructuresList.Add(new Structure(newPart,x2,y1-(Math.Abs(y1-y2)/2),"RoadPart"));
+                }
+                else
+                {
+                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x2,y1+(Math.Abs(y1-y2)/2),1001-(y1+500)), Quaternion.Euler(0f,0f,0f));
+                    newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
+                    tempPartsOfRoad.Add(newPart);
+                    allStructuresList.Add(new Structure(newPart,x2,y1+(Math.Abs(y1-y2)/2),"RoadPart"));
                 }
             }
         }
@@ -237,6 +229,7 @@ public class BuildingsManager : MonoBehaviour
             Debug.Log("Unusual road!");
         }
 
-        allRoadsList.Add(i1+i2+"",tempPartsOfRoad);
+        allRoadsList.Add(i1+""+i2+"",tempPartsOfRoad);
+        //Debug.Log(i1+""+i2+"");
     }
 }

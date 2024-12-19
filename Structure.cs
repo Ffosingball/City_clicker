@@ -16,6 +16,7 @@ public class Structure
         this.y = y;
         id=lastID;
         lastID++;
+        //Debug.Log("id: "+id+"; x: "+x+"; y: "+y);
     }
 
     public int getX(){return x;}

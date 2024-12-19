@@ -33,7 +33,7 @@ static public class Balance
     static public void updateMultiplier(float increase){
         if(increase>0)
             multiplier += increase;
-        Debug.Log(multiplier);
+        //Debug.Log(multiplier);
     }
 
     static public float getAdder(){
