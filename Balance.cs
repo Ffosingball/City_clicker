@@ -21,8 +21,9 @@ static public class Balance
         return increaseBy;
     }
 
-    static public void updateBalance(int withdraw){
+    static public void updateBalance(float withdraw){
         balance -= withdraw;
+        //Debug.Log(withdraw+"; "+balance);
         UIManager.updateText((float)Math.Round(balance));
     }
 
@@ -56,15 +57,15 @@ static public class Balance
         if(exponent<3)
             return Math.Round(number*(float)Math.Pow(10,exponent)).ToString();
         else if(exponent<6)
-            return (float)Math.Round(number,2)+powersOfTen[0];
+            return (float)Math.Round(number*Math.Pow(10,exponent-3),5-exponent)+powersOfTen[0];
         else if(exponent<9)
-            return (float)Math.Round(number,2)+powersOfTen[1];
+            return (float)Math.Round(number*Math.Pow(10,exponent-6),8-exponent)+powersOfTen[1];
         else if(exponent<12)
-            return (float)Math.Round(number,2)+powersOfTen[2];
+            return (float)Math.Round(number*Math.Pow(10,exponent-9),11-exponent)+powersOfTen[2];
         else if(exponent<15)
-            return (float)Math.Round(number,2)+powersOfTen[3];
+            return (float)Math.Round(number*Math.Pow(10,exponent-12),14-exponent)+powersOfTen[3];
         else if(exponent<18)
-            return (float)Math.Round(number,2)+powersOfTen[4];
+            return (float)Math.Round(number*Math.Pow(10,exponent-15),17-exponent)+powersOfTen[4];
         else
             return Math.Round(number,2).ToString();
     }
