@@ -86,7 +86,7 @@ public class BuildingsManager : MonoBehaviour
         int x = UnityEngine.Random.Range(-1000,1001);
         int houseNum = UnityEngine.Random.Range(0,structures.Length);
 
-        GameObject newHouse = Instantiate(structures[houseNum], new Vector3(x,y,1000-(y+500)), Quaternion.Euler(0f,0f,0f));
+        GameObject newHouse = Instantiate(structures[houseNum], new Vector3(x,y,y+500), Quaternion.Euler(0f,0f,0f));
         Structure newStruct = new Structure(newHouse,x,y,type);
         allStructuresList.Add(newStruct);
         allBuildings.Add(newStruct);
@@ -151,66 +151,26 @@ public class BuildingsManager : MonoBehaviour
             if(UnityEngine.Random.Range(0,2)==0)
             {
                 if(y1>y2)
-                {
-                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1,y1-(Math.Abs(y1-y2)/2),1001-(y2+500)), Quaternion.Euler(0f,0f,0f));
-                    newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
-                    tempPartsOfRoad.Add(newPart);
-                    allStructuresList.Add(new Structure(newPart,x1,y1-(Math.Abs(y1-y2)/2),"RoadPart"));
-                }
+                    tempPartsOfRoad.Add(createVerticalRoad(y1,y1,y2,x1,-1));
                 else
-                {
-                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1,y1+(Math.Abs(y1-y2)/2),1001-(y1+500)), Quaternion.Euler(0f,0f,0f));
-                    newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
-                    tempPartsOfRoad.Add(newPart);
-                    allStructuresList.Add(new Structure(newPart,x1,y1+(Math.Abs(y1-y2)/2),"RoadPart"));
-                }
+                    tempPartsOfRoad.Add(createVerticalRoad(y2,y1,y2,x1,1));
 
                 if(x1>x2)
-                {
-                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1-(Math.Abs(x1-x2)/2),y2,1001-(y2+500)), Quaternion.Euler(0f,0f,0f));
-                    newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
-                    tempPartsOfRoad.Add(newPart);
-                    allStructuresList.Add(new Structure(newPart,x1-(Math.Abs(x1-x2)/2),y2,"RoadPart"));
-                }
+                    tempPartsOfRoad.Add(createHorizontalRoad(y2,x1,x2,-1));
                 else
-                {
-                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1+(Math.Abs(x1-x2)/2),y2,1001-(y2+500)), Quaternion.Euler(0f,0f,0f));
-                    newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
-                    tempPartsOfRoad.Add(newPart);
-                    allStructuresList.Add(new Structure(newPart,x1+(Math.Abs(x1-x2)/2),y2,"RoadPart"));
-                }
+                    tempPartsOfRoad.Add(createHorizontalRoad(y2,x1,x2,1));
             }
             else
             {
                 if(x1>x2)
-                {
-                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1-(Math.Abs(x1-x2)/2),y1,1001-(y1+500)), Quaternion.Euler(0f,0f,0f));
-                    newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
-                    tempPartsOfRoad.Add(newPart);
-                    allStructuresList.Add(new Structure(newPart,x1-(Math.Abs(x1-x2)/2),y1,"RoadPart"));
-                }
+                    tempPartsOfRoad.Add(createHorizontalRoad(y1,x1,x2,-1));
                 else
-                {
-                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x1+(Math.Abs(x1-x2)/2),y1,1001-(y1+500)), Quaternion.Euler(0f,0f,0f));
-                    newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
-                    tempPartsOfRoad.Add(newPart);
-                    allStructuresList.Add(new Structure(newPart,x1+(Math.Abs(x1-x2)/2),y1,"RoadPart"));
-                }
+                    tempPartsOfRoad.Add(createHorizontalRoad(y1,x1,x2,1));
 
                 if(y1>y2)
-                {
-                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x2,y1-(Math.Abs(y1-y2)/2),1001-(y2+500)), Quaternion.Euler(0f,0f,0f));
-                    newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
-                    tempPartsOfRoad.Add(newPart);
-                    allStructuresList.Add(new Structure(newPart,x2,y1-(Math.Abs(y1-y2)/2),"RoadPart"));
-                }
+                    tempPartsOfRoad.Add(createVerticalRoad(y1,y1,y2,x2,-1));
                 else
-                {
-                    GameObject newPart = Instantiate(roadTypes[0], new Vector3(x2,y1+(Math.Abs(y1-y2)/2),1001-(y1+500)), Quaternion.Euler(0f,0f,0f));
-                    newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
-                    tempPartsOfRoad.Add(newPart);
-                    allStructuresList.Add(new Structure(newPart,x2,y1+(Math.Abs(y1-y2)/2),"RoadPart"));
-                }
+                    tempPartsOfRoad.Add(createVerticalRoad(y2,y1,y2,x2,1));
             }
         }
         else
@@ -220,5 +180,35 @@ public class BuildingsManager : MonoBehaviour
 
         allRoadsList.Add(i1+""+i2+"",tempPartsOfRoad);
         //Debug.Log(i1+""+i2+"");
+    }
+
+
+    public GameObject createVerticalRoad(int h, int y1, int y2, int x, int operand)
+    {   
+        int y;
+        if(operand==-1)
+            y=y1-(Math.Abs(y1-y2)/2);
+        else
+            y=y1+(Math.Abs(y1-y2)/2);
+
+        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,y,h+520), Quaternion.Euler(0f,0f,0f));
+        newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
+        allStructuresList.Add(new Structure(newPart,x,y,"RoadPart"));
+        return newPart;
+    }
+
+
+    public GameObject createHorizontalRoad(int height, int x1, int x2, int operand)
+    {
+        int x;
+        if(operand==-1)
+            x=x1-(Math.Abs(x1-x2)/2);
+        else
+            x=x1+(Math.Abs(x1-x2)/2);
+
+        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,height,height+520), Quaternion.Euler(0f,0f,0f));
+        newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
+        allStructuresList.Add(new Structure(newPart,x,height,"RoadPart"));
+        return newPart;
     }
 }
