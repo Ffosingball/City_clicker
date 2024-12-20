@@ -9,7 +9,8 @@ public class BuildingsManager : MonoBehaviour
     private List<Structure> allStructuresList, allBuildings;
     private Dictionary<string, List<GameObject>> allRoadsList;
     private int numOfHouses=0, numOfBigHouses=0, numOfCraft=0;
-    public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfTheCornerRoad=0.4f;
+    public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfTheCornerRoad=0.4f, probabilityOfCreatingAddRoad=0.1f;
+    public int leastAmountOfBuildingsToCreateAddRoad=10;
     public float houseCost=20, bigHouseCost=40, craftCost=80, roadLength=5;
     public Text houseText, bigHouseText, craftText, numOfHousesText, numOfBigHousesText, numOfCraftHousesText;
     public Button houseButton, bigHouseButton, craftButton;
@@ -63,7 +64,7 @@ public class BuildingsManager : MonoBehaviour
         houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
         numOfHouses++;
         numOfHousesText.text="X"+numOfHouses;
-        createStructure(houses);
+        createStructure(houses, "House");
     }
 
 
@@ -75,56 +76,68 @@ public class BuildingsManager : MonoBehaviour
         bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
         numOfBigHouses++;
         numOfBigHousesText.text="X"+numOfBigHouses;
-        createStructure(bigHouses);
+        createStructure(bigHouses, "BigHouse");
     }
 
 
-    private void createStructure(GameObject[] structures)
+    private void createStructure(GameObject[] structures, string type)
     {
         int y = UnityEngine.Random.Range(-500,501);
         int x = UnityEngine.Random.Range(-1000,1001);
         int houseNum = UnityEngine.Random.Range(0,structures.Length);
 
         GameObject newHouse = Instantiate(structures[houseNum], new Vector3(x,y,1000-(y+500)), Quaternion.Euler(0f,0f,0f));
-        Structure newStruct = new Structure(newHouse,x,y,"House");
+        Structure newStruct = new Structure(newHouse,x,y,type);
         allStructuresList.Add(newStruct);
         allBuildings.Add(newStruct);
 
         createRoadStructure(allBuildings.Count-1);
+
+        if(allBuildings.Count>=leastAmountOfBuildingsToCreateAddRoad)
+        {
+            if(UnityEngine.Random.Range(0f,1f)<=probabilityOfCreatingAddRoad)
+            {
+                createRoadStructure(UnityEngine.Random.Range(0,allBuildings.Count),UnityEngine.Random.Range(0,allBuildings.Count));
+            }
+        }
     }
 
     private void createRoadStructure(int index1)
     {
         if(allBuildings.Count>1)
         {
-            if(allRoadsList.Count==0)
-            {
-                int index2 = UnityEngine.Random.Range(0,allBuildings.Count);
+            int index2=findTheClosest(index1);
 
-                while(index1==index2)
-                {
-                    index2 = UnityEngine.Random.Range(0,allBuildings.Count);
-                }
-
+            if(!allRoadsList.ContainsKey(index1+""+index2+"") && !allRoadsList.ContainsKey(index2+""+index1+""))
                 createRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
-            }
-            else
+        }
+    }
+
+
+    private void createRoadStructure(int index1, int index2)
+    {
+        if(!allRoadsList.ContainsKey(index1+""+index2+"") && !allRoadsList.ContainsKey(index2+""+index1+""))
+        {
+            Debug.Log("Additional Road!");
+            createRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
+        }
+    }
+
+
+    private int findTheClosest(int indexTarget)
+    {
+        double minDistance=100000;
+        int closestIndex=-1;
+        for(int i=0; i<allBuildings.Count-1; i++)
+        {
+            if(Math.Sqrt(Math.Pow(allBuildings[i].getX()-allBuildings[indexTarget].getX(),2)+Math.Pow(allBuildings[i].getY()-allBuildings[indexTarget].getY(),2))<minDistance)
             {
-                int index2 = UnityEngine.Random.Range(0,allBuildings.Count);
-
-                int repeat=0;
-                while((index1==index2 || allRoadsList.ContainsKey(index1+""+index2+"") || allRoadsList.ContainsKey(index2+""+index1+"")) && repeat<10)
-                {
-                    index2 = UnityEngine.Random.Range(0,allBuildings.Count);
-                    repeat++;
-                }
-
-                //Debug.Log("i1 "+index1+"; i2 "+index2+"; total "+allBuildings.Count);
-
-                if(!allRoadsList.ContainsKey(index1+""+index2+"") && !allRoadsList.ContainsKey(index2+""+index1+""))
-                    createRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
+                closestIndex = i;
+                minDistance=Math.Sqrt(Math.Pow(allBuildings[i].getX()-allBuildings[indexTarget].getX(),2)+Math.Pow(allBuildings[i].getY()-allBuildings[indexTarget].getY(),2));
             }
         }
+
+        return closestIndex;
     }
 
 
