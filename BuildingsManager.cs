@@ -8,9 +8,10 @@ public class BuildingsManager : MonoBehaviour
 {
     private List<Structure> allStructuresList, allBuildings;
     private Dictionary<string, List<GameObject>> allRoadsList;
+    private int numOfHouses=0, numOfBigHouses=0, numOfCraft=0;
     public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfTheCornerRoad=0.4f;
     public float houseCost=20, bigHouseCost=40, craftCost=80, roadLength=5;
-    public Text houseText, bigHouseText, craftText;
+    public Text houseText, bigHouseText, craftText, numOfHousesText, numOfBigHousesText, numOfCraftHousesText;
     public Button houseButton, bigHouseButton, craftButton;
     public GameObject[] houses;
     public GameObject[] bigHouses;
@@ -26,6 +27,9 @@ public class BuildingsManager : MonoBehaviour
         houseText.text="\n"+houseCost;
         bigHouseText.text="\n"+bigHouseCost;
         craftText.text="\n"+craftCost;
+        numOfHousesText.text="";
+        numOfBigHousesText.text="";
+        numOfCraftHousesText.text="";
 
         houseButton.interactable = false;
         bigHouseButton.interactable = false;
@@ -57,6 +61,8 @@ public class BuildingsManager : MonoBehaviour
         Balance.updateAdder(adderIncrease);
         houseCost=houseCost*costMultiplier;
         houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
+        numOfHouses++;
+        numOfHousesText.text="X"+numOfHouses;
         createStructure(houses);
     }
 
@@ -67,6 +73,8 @@ public class BuildingsManager : MonoBehaviour
         Balance.updateMultiplier(multiplierIncrease);
         bigHouseCost=bigHouseCost*costMultiplier;
         bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
+        numOfBigHouses++;
+        numOfBigHousesText.text="X"+numOfBigHouses;
         createStructure(bigHouses);
     }
 
