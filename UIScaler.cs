@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class UIScaler : MonoBehaviour
 {
 
-    public Text[] buttonText, bigText;
+    public Text[] buttonText, bigText, smallText;
     public Text coinsNum;
     public int screenSizeDivider=50; 
-    public float coinsTextSize=1.8f;
+    public float coinsTextSize=1.8f, smallTextSize=0.7f;
     private int previousHeight;
     //public static int curTextSize;
 
@@ -40,6 +40,10 @@ public class UIScaler : MonoBehaviour
 
         foreach (Text bigText1 in bigText){
             bigText1.fontSize = (int)(textSize*coinsTextSize);
+        }
+
+        foreach (Text smallText1 in smallText){
+            smallText1.fontSize = (int)(textSize*smallTextSize);
         }
 
         coinsNum.fontSize = (int)(textSize*coinsTextSize);
