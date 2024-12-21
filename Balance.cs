@@ -27,6 +27,14 @@ static public class Balance
         UIManager.updateText((float)Math.Round(balance));
     }
 
+    static public void increaseBalance(float income)
+    {
+        if(income>0)
+            balance+=income;
+        
+        UIManager.updateText((float)Math.Round(balance));
+    }
+
     static public float getMultiplier(){
         return multiplier;
     }

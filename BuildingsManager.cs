@@ -10,7 +10,7 @@ public class BuildingsManager : MonoBehaviour
     private Dictionary<string, List<GameObject>> allRoadsList;
     private int numOfHouses=0, numOfBigHouses=0, numOfCraft=0;
     public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfTheCornerRoad=0.4f, probabilityOfCreatingAddRoad=0.1f;
-    public int leastAmountOfBuildingsToCreateAddRoad=10;
+    public int leastAmountOfBuildingsToCreateAddRoad=10, maxWidth=950, maxHeight=550;
     public float houseCost=20, bigHouseCost=40, craftCost=80, roadLength=5;
     public Text houseText, bigHouseText, craftText, numOfHousesText, numOfBigHousesText, numOfCraftHousesText;
     public Button houseButton, bigHouseButton, craftButton;
@@ -18,6 +18,7 @@ public class BuildingsManager : MonoBehaviour
     public GameObject[] bigHouses;
     public GameObject[] roadTypes;
     public GameObject[] craftBuildings;
+    public PassiveIncomeManager passiveIncomeManager;
 
     private void Start()
     {
@@ -53,6 +54,8 @@ public class BuildingsManager : MonoBehaviour
             craftButton.interactable = true;
         else
             craftButton.interactable = false;
+
+        //Debug.Log(Screen.width+"; "+Screen.height);
     }
 
 
@@ -60,7 +63,7 @@ public class BuildingsManager : MonoBehaviour
     {
         Balance.updateBalance(houseCost);
         Balance.updateAdder(adderIncrease);
-        houseCost=houseCost*costMultiplier;
+        houseCost*=costMultiplier;
         houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
         numOfHouses++;
         numOfHousesText.text="X"+numOfHouses;
@@ -72,7 +75,7 @@ public class BuildingsManager : MonoBehaviour
     {
         Balance.updateBalance(bigHouseCost);
         Balance.updateMultiplier(multiplierIncrease);
-        bigHouseCost=bigHouseCost*costMultiplier;
+        bigHouseCost*=costMultiplier;
         bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
         numOfBigHouses++;
         numOfBigHousesText.text="X"+numOfBigHouses;
@@ -80,13 +83,27 @@ public class BuildingsManager : MonoBehaviour
     }
 
 
-    private void createStructure(GameObject[] structures, string type)
+    public void buyCraftHouse()
     {
-        int y = UnityEngine.Random.Range(-500,501);
-        int x = UnityEngine.Random.Range(-1000,1001);
+        Balance.updateBalance(craftCost);
+        craftCost*=costMultiplier;
+        craftText.text="\n"+Balance.outputCostCorrectly(craftCost);
+        numOfCraft++;
+        numOfCraftHousesText.text="X"+numOfCraft;
+
+        GameObject newCraft = createStructure(craftBuildings, "CraftHouse");
+        CraftHouseBehaviour newBehaviour = newCraft.GetComponent<CraftHouseBehaviour>();
+        newBehaviour.passiveIncomeManager = passiveIncomeManager;
+    }
+
+
+    private GameObject createStructure(GameObject[] structures, string type)
+    {
+        int y = UnityEngine.Random.Range(-(maxHeight),(maxHeight)+1);
+        int x = UnityEngine.Random.Range(-(maxWidth),(maxWidth)+1);
         int houseNum = UnityEngine.Random.Range(0,structures.Length);
 
-        GameObject newHouse = Instantiate(structures[houseNum], new Vector3(x,y,y+500), Quaternion.Euler(0f,0f,0f));
+        GameObject newHouse = Instantiate(structures[houseNum], new Vector3(x,y,y+maxHeight), Quaternion.Euler(0f,0f,0f));
         Structure newStruct = new Structure(newHouse,x,y,type);
         allStructuresList.Add(newStruct);
         allBuildings.Add(newStruct);
@@ -100,7 +117,12 @@ public class BuildingsManager : MonoBehaviour
                 createRoadStructure(UnityEngine.Random.Range(0,allBuildings.Count),UnityEngine.Random.Range(0,allBuildings.Count));
             }
         }
+
+        return newHouse;
     }
+
+
+
 
     private void createRoadStructure(int index1)
     {
@@ -191,7 +213,7 @@ public class BuildingsManager : MonoBehaviour
         else
             y=y1+(Math.Abs(y1-y2)/2);
 
-        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,y,h+520), Quaternion.Euler(0f,0f,0f));
+        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,y,h+20+maxHeight), Quaternion.Euler(0f,0f,0f));
         newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
         allStructuresList.Add(new Structure(newPart,x,y,"RoadPart"));
         return newPart;
@@ -206,7 +228,7 @@ public class BuildingsManager : MonoBehaviour
         else
             x=x1+(Math.Abs(x1-x2)/2);
 
-        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,height,height+520), Quaternion.Euler(0f,0f,0f));
+        GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,height,height+20+maxHeight), Quaternion.Euler(0f,0f,0f));
         newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
         allStructuresList.Add(new Structure(newPart,x,height,"RoadPart"));
         return newPart;
