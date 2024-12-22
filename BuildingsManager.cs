@@ -8,9 +8,10 @@ public class BuildingsManager : MonoBehaviour
 {
     private List<Structure> allStructuresList, allBuildings;
     private Dictionary<string, List<GameObject>> allRoadsList;
+    private Dictionary<string, GameObject> allFarms;
     private int numOfHouses=0, numOfBigHouses=0, numOfCraft=0, numOfFarms;
-    public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfTheCornerRoad=0.4f, probabilityOfCreatingAddRoad=0.1f;
-    public int leastAmountOfBuildingsToCreateAddRoad=10, maxWidth=950, maxHeight=550, middleWidth=670, middleheight=370, smallWidth=300, smallHeight=150;
+    public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfCreatingARoad=0.95f, probabilityOfCreatingAddRoad=0.1f;
+    public int leastAmountOfBuildingsToCreateAddRoad=10, maxWidth=950, maxHeight=550, middleWidth=670, middleheight=370, smallWidth=300, smallHeight=150, farmWidth=130, farmHeight=100, farmWdisplacement=15, farmHdisplacement=10;
     public float houseCost=20, bigHouseCost=40, craftCost=80, roadLength=5, farmCost;
     public Text houseText, bigHouseText, craftText, farmText, numOfHousesText, numOfBigHousesText, numOfCraftHousesText, numOfFarmsText;
     public Button houseButton, bigHouseButton, craftButton, farmButton;
@@ -26,6 +27,7 @@ public class BuildingsManager : MonoBehaviour
         allStructuresList = new List<Structure>();
         allBuildings = new List<Structure>();
         allRoadsList = new Dictionary<string, List<GameObject>>();
+        allFarms = new Dictionary<string, GameObject>();
 
         houseText.text="\n"+houseCost;
         bigHouseText.text="\n"+bigHouseCost;
@@ -122,6 +124,7 @@ public class BuildingsManager : MonoBehaviour
 
     private GameObject createStructure(GameObject[] structures, string type, bool createRoad)
     {
+        string key="";
         int y=-1, x=-1;
         switch(type)
         {
@@ -130,11 +133,25 @@ public class BuildingsManager : MonoBehaviour
                 x = UnityEngine.Random.Range(-(smallWidth),(smallWidth)+1);
                 break;
             case "House":
+                y = UnityEngine.Random.Range(-(middleheight),(middleheight)+1);
+                x = UnityEngine.Random.Range(-(middleWidth),(middleWidth)+1);
+                break;
             case "BigHouse":
                 generateRandomBetween(-middleWidth,middleWidth,-middleheight,middleheight,-smallWidth,smallWidth,-smallHeight,smallHeight,out x, out y);
                 break;
             case "Farm":
-                generateRandomBetween(-maxWidth,maxWidth,-maxHeight,maxHeight,-middleWidth,middleWidth,-middleheight,middleheight,out x, out y);
+                generateRandomBetween(-maxWidth/farmWidth,maxWidth/farmWidth,-maxHeight/farmHeight,maxHeight/farmHeight,-(middleWidth+farmWidth)/farmWidth,(middleWidth+farmWidth)/farmWidth,-(middleheight+farmHeight)/farmHeight,(middleheight+farmHeight)/farmHeight,out x, out y);
+                
+                int repeat=0;
+                while(allFarms.ContainsKey(x+""+y+"") || repeat<10)
+                {
+                    generateRandomBetween(-maxWidth/farmWidth,maxWidth/farmWidth,-maxHeight/farmHeight,maxHeight/farmHeight,-(middleWidth+farmWidth)/farmWidth,(middleWidth+farmWidth)/farmWidth,-(middleheight+farmHeight)/farmHeight,(middleheight+farmHeight)/farmHeight,out x, out y);
+                    repeat++;
+                }
+
+                key=x+""+y+"";
+                x=(x*farmWidth)+UnityEngine.Random.Range(-farmWdisplacement,farmWdisplacement);
+                y=(y*farmHeight)+UnityEngine.Random.Range(-farmHdisplacement,farmHdisplacement);
                 break;
             default:
                 Debug.Log("Unknown building type!");
@@ -147,6 +164,9 @@ public class BuildingsManager : MonoBehaviour
         Structure newStruct = new Structure(newHouse,x,y,type);
         allStructuresList.Add(newStruct);
         allBuildings.Add(newStruct);
+
+        if(type=="Farm")
+            allFarms.Add(key,newHouse);
 
         if(createRoad)
         {
@@ -167,6 +187,7 @@ public class BuildingsManager : MonoBehaviour
 
     private void generateRandomBetween(int x_min, int x_max, int y_min, int y_max, int x_inner_min, int x_inner_max, int y_inner_min, int y_inner_max, out int x, out int y)
     {
+        //Debug.Log(y_max+"; "+y_inner_max);
         int A1 = (x_inner_max - x_inner_min) * (y_max - y_inner_max);
         int A2 = (x_inner_max - x_inner_min) * (y_inner_min - y_min); 
         int A3 = (x_inner_min - x_min) * (y_max - y_min);
@@ -244,7 +265,7 @@ public class BuildingsManager : MonoBehaviour
         List<GameObject> tempPartsOfRoad = new List<GameObject>();
         //Debug.Log("Coord1: "+x1+", "+y1+"; Coord2: "+x2+", "+y2+"; ids: "+i1+", "+i2);
 
-        if(UnityEngine.Random.Range(0f,1f)<probabilityOfTheCornerRoad)
+        if(UnityEngine.Random.Range(0f,1f)<probabilityOfCreatingARoad)
         {
             if(UnityEngine.Random.Range(0,2)==0)
             {
@@ -270,10 +291,6 @@ public class BuildingsManager : MonoBehaviour
                 else
                     tempPartsOfRoad.Add(createVerticalRoad(y2,y1,y2,x2,1));
             }
-        }
-        else
-        {
-            Debug.Log("Unusual road!");
         }
 
         allRoadsList.Add(i1+""+i2+"",tempPartsOfRoad);
