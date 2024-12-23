@@ -9,7 +9,7 @@ public class ClickButtonBehaviour : MonoBehaviour
     public Text coinsNum;
     public GameObject movingText, mainButton;
     public int xOffset=0, yOffset=20;
-    public float textSpeedMovement=50, textDistanceMove=100, interval;
+    public float textSpeedMovement=50, textDistanceMove=100, interval=1f;
     private int clicks=0;
     private float timePassed=0;
 
@@ -17,13 +17,16 @@ public class ClickButtonBehaviour : MonoBehaviour
     void Update()
     {
         timePassed+= Time.deltaTime;
+       //Debug.Log(Time.deltaTime);
 
-        if(timePassed>=interval)
+        if(timePassed>=interval && clicks>0)
         {
             Debug.Log("Clicks done: "+clicks);
             clicks=0;
             timePassed=0;
         }
+        else if(timePassed>=interval)
+            timePassed=0;
     }
 
 
