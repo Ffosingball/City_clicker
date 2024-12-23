@@ -9,17 +9,22 @@ public class ClickButtonBehaviour : MonoBehaviour
     public Text coinsNum;
     public GameObject movingText, mainButton;
     public int xOffset=0, yOffset=20;
-    public float textSpeedMovement=50, textDistanceMove=100;
+    public float textSpeedMovement=50, textDistanceMove=100, interval;
+    private int clicks=0;
+    private float timePassed=0;
 
 
-    // Update is called once per frame
-    /*void Update()
+    void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        timePassed+= Time.deltaTime;
+
+        if(timePassed>=interval)
         {
-            increaseBalance();
+            Debug.Log("Clicks done: "+clicks);
+            clicks=0;
+            timePassed=0;
         }
-    }*/
+    }
 
 
     public void increaseBalance()
@@ -58,5 +63,11 @@ public class ClickButtonBehaviour : MonoBehaviour
             distanceMoved+=1*textSpeedMovement*Time.deltaTime;
         }
         Destroy(movingTextCur);
+    }
+
+
+    public void countClicks()
+    {
+        clicks++;
     }
 }

@@ -30,7 +30,7 @@ public class FarmBehaviour : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
             }
 
-            Balance.increaseBalance(passiveIncomeManager.amountToGetFarm);
+            Balance.increaseBalance(passiveIncomeManager.getIncomeFarm());
             createText();
         }
     }
@@ -45,7 +45,7 @@ public class FarmBehaviour : MonoBehaviour
         //And again
         GameObject childText = childCanva.transform.Find("howMuchEarned").gameObject;
         Text textNeeded = childText.GetComponent<Text>();
-        textNeeded.text="+"+Balance.outputCostCorrectly((float)Math.Round(passiveIncomeManager.amountToGetFarm));
+        textNeeded.text="+"+Balance.outputCostCorrectly((float)Math.Round(passiveIncomeManager.getIncomeFarm()));
         StartCoroutine(moveText(movingTextCur));
     }
 

@@ -30,7 +30,7 @@ public class CraftHouseBehaviour : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
             }
 
-            Balance.increaseBalance(passiveIncomeManager.amountToGetCraft);
+            Balance.increaseBalance(passiveIncomeManager.getIncomeCraft());
             createText();
         }
     }
@@ -45,7 +45,7 @@ public class CraftHouseBehaviour : MonoBehaviour
         //And again
         GameObject childText = childCanva.transform.Find("howMuchEarned").gameObject;
         Text textNeeded = childText.GetComponent<Text>();
-        textNeeded.text="+"+Balance.outputCostCorrectly((float)Math.Round(passiveIncomeManager.amountToGetCraft));
+        textNeeded.text="+"+Balance.outputCostCorrectly((float)Math.Round(passiveIncomeManager.getIncomeCraft()));
         StartCoroutine(moveText(movingTextCur));
     }
 

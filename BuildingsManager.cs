@@ -9,7 +9,8 @@ public class BuildingsManager : MonoBehaviour
     private List<Structure> allStructuresList, allBuildings;
     private Dictionary<string, List<GameObject>> allRoadsList;
     private Dictionary<string, GameObject> allFarms;
-    private int numOfHouses=0, numOfBigHouses=0, numOfCraft=0, numOfFarms;
+    [HideInInspector]
+    public int numOfHouses=0, numOfBigHouses=0, numOfCraft=0, numOfFarms;
     public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfCreatingARoad=0.95f, probabilityOfCreatingAddRoad=0.1f;
     public int leastAmountOfBuildingsToCreateAddRoad=10, maxWidth=950, maxHeight=550, middleWidth=670, middleheight=370, smallWidth=300, smallHeight=150, farmWidth=130, farmHeight=100, farmWdisplacement=15, farmHdisplacement=10;
     public float houseCost=20, bigHouseCost=40, craftCost=80, roadLength=5, farmCost;
@@ -29,10 +30,10 @@ public class BuildingsManager : MonoBehaviour
         allRoadsList = new Dictionary<string, List<GameObject>>();
         allFarms = new Dictionary<string, GameObject>();
 
-        houseText.text="\n"+houseCost;
-        bigHouseText.text="\n"+bigHouseCost;
-        craftText.text="\n"+craftCost;
-        farmText.text="\n"+farmCost;
+        houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
+        bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
+        craftText.text="\n"+Balance.outputCostCorrectly(craftCost);
+        farmText.text="\n"+Balance.outputCostCorrectly(farmCost);
         numOfHousesText.text="";
         numOfBigHousesText.text="";
         numOfCraftHousesText.text="";
@@ -73,24 +74,26 @@ public class BuildingsManager : MonoBehaviour
     public void buyHouse()
     {
         Balance.updateBalance(houseCost);
-        Balance.updateAdder(adderIncrease);
+        Balance.updateMultiplier(multiplierIncrease);
         houseCost*=costMultiplier;
         houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
         numOfHouses++;
         numOfHousesText.text="X"+numOfHouses;
         createStructure(houses, "House", true);
+        passiveIncomeManager.increaseIncomePerHouse(1);
     }
 
 
     public void buyBigHouse()
     {
         Balance.updateBalance(bigHouseCost);
-        Balance.updateMultiplier(multiplierIncrease);
+        Balance.updateAdder(adderIncrease);
         bigHouseCost*=costMultiplier;
         bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
         numOfBigHouses++;
         numOfBigHousesText.text="X"+numOfBigHouses;
         createStructure(bigHouses, "BigHouse", true);
+        passiveIncomeManager.increaseIncomePerBigHouse(1);
     }
 
 
@@ -122,6 +125,20 @@ public class BuildingsManager : MonoBehaviour
     }
 
 
+    public void decreseCostBigHouse(float decreaseBy)
+    {
+        bigHouseCost/=decreaseBy;
+        bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
+    }
+
+
+    public void decreseCostHouse(float decreaseBy)
+    {
+        houseCost/=decreaseBy;
+        houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
+    }
+
+
     private GameObject createStructure(GameObject[] structures, string type, bool createRoad)
     {
         string key="";
@@ -133,23 +150,23 @@ public class BuildingsManager : MonoBehaviour
                 x = UnityEngine.Random.Range(-(smallWidth),(smallWidth)+1);
                 break;
             case "House":
-                y = UnityEngine.Random.Range(-(middleheight),(middleheight)+1);
-                x = UnityEngine.Random.Range(-(middleWidth),(middleWidth)+1);
+                generateRandomBetween(-middleWidth,middleWidth,-middleheight,middleheight,-smallWidth,smallWidth,-smallHeight,smallHeight,out x, out y);
                 break;
             case "BigHouse":
-                generateRandomBetween(-middleWidth,middleWidth,-middleheight,middleheight,-smallWidth,smallWidth,-smallHeight,smallHeight,out x, out y);
+                y = UnityEngine.Random.Range(-(middleheight),(middleheight)+1);
+                x = UnityEngine.Random.Range(-(middleWidth),(middleWidth)+1);
                 break;
             case "Farm":
                 generateRandomBetween(-maxWidth/farmWidth,maxWidth/farmWidth,-maxHeight/farmHeight,maxHeight/farmHeight,-(middleWidth+farmWidth)/farmWidth,(middleWidth+farmWidth)/farmWidth,-(middleheight+farmHeight)/farmHeight,(middleheight+farmHeight)/farmHeight,out x, out y);
                 
                 int repeat=0;
-                while(allFarms.ContainsKey(x+""+y+"") || repeat<10)
+                while(allFarms.ContainsKey(x+","+y+"") || repeat<10)
                 {
                     generateRandomBetween(-maxWidth/farmWidth,maxWidth/farmWidth,-maxHeight/farmHeight,maxHeight/farmHeight,-(middleWidth+farmWidth)/farmWidth,(middleWidth+farmWidth)/farmWidth,-(middleheight+farmHeight)/farmHeight,(middleheight+farmHeight)/farmHeight,out x, out y);
                     repeat++;
                 }
 
-                key=x+""+y+"";
+                key=x+","+y+"";
                 x=(x*farmWidth)+UnityEngine.Random.Range(-farmWdisplacement,farmWdisplacement);
                 y=(y*farmHeight)+UnityEngine.Random.Range(-farmHdisplacement,farmHdisplacement);
                 break;
@@ -227,7 +244,7 @@ public class BuildingsManager : MonoBehaviour
         {
             int index2=findTheClosest(index1);
 
-            if(!allRoadsList.ContainsKey(index1+""+index2+"") && !allRoadsList.ContainsKey(index2+""+index1+""))
+            if(!allRoadsList.ContainsKey(index1+","+index2+"") && !allRoadsList.ContainsKey(index2+","+index1+""))
                 createRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
         }
     }
@@ -235,9 +252,9 @@ public class BuildingsManager : MonoBehaviour
 
     private void createRoadStructure(int index1, int index2)
     {
-        if(!allRoadsList.ContainsKey(index1+""+index2+"") && !allRoadsList.ContainsKey(index2+""+index1+""))
+        if(!allRoadsList.ContainsKey(index1+","+index2+"") && !allRoadsList.ContainsKey(index2+","+index1+""))
         {
-            Debug.Log("Additional Road!");
+            //Debug.Log("Additional Road!");
             createRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);
         }
     }
@@ -293,7 +310,7 @@ public class BuildingsManager : MonoBehaviour
             }
         }
 
-        allRoadsList.Add(i1+""+i2+"",tempPartsOfRoad);
+        allRoadsList.Add(i1+","+i2+"",tempPartsOfRoad);
         //Debug.Log(i1+""+i2+"");
     }
 
