@@ -1,10 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonClickInfo : MonoBehaviour
 {
-    private bool isMouseOver = false;
     public Camera mainCamera;
     public GameObject infoPanelToShow;
     private GameObject gameObject;
@@ -13,29 +13,26 @@ public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointe
     public int numOfTextToShow=-1;
     public UIManager uIManager;
     private Text importantText=null, otherText=null;
-    private float timePassed=0;
-
-
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        isMouseOver = true;
-        timePassed=0;
-    }
-
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        isMouseOver = false;
-        timePassed=0;
-    }
+    private bool isShown=false;
 
 
     private void Update()
-    {
-        timePassed+=Time.deltaTime;
+    {      
+        if (Input.GetMouseButtonDown(0))
+            isShown=false;
+        
+        if(!isShown)
+        {
+            Destroy(gameObject);
+            gameObject=null;
+        }
+            
+    }
 
-        if (isMouseOver && timePassed>=waitFor)
+
+    public void showInfo()
+    {
+        if(isShown==false)
         {
             Vector3 mousePosition = Input.mousePosition;
             mousePosition.z = 0.09f;
@@ -66,11 +63,8 @@ public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointe
             }
 
             uIManager.textToShow[numOfTextToShow](importantText, otherText);
-        }
-        else
-        {
-            Destroy(gameObject);
-            gameObject=null;
+
+            isShown=true;
         }
     }
 }
