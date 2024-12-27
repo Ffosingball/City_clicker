@@ -11,7 +11,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
     public Text craftUpgradeCostText, farmUpgradeCostText, craftLevelText, farmLevelText, upgradeIncomeText1, upgradeIncomeText2, decreaseCostText1, decreaseCostText2;
     public Button craftUpgradeButton, farmUpgradeButton, upgradeIncomeButton1, upgradeIncomeButton2, decreaseCostButton1, decreaseCostButton2;
     private int craftUpgrades=0, farmUpgrades=0;
-    private bool incomeIncreased1=false, incomeIncreased2=false, costDecreased1=false, costDecreased2=false;
+    public bool incomeIncreased1=false, incomeIncreased2=false, costDecreased1=false, costDecreased2=false;
 
 
     private void Start()

@@ -11,7 +11,7 @@ public class BuildingsManager : MonoBehaviour
     private Dictionary<string, GameObject> allFarms;
     [HideInInspector]
     public int numOfHouses=0, numOfBigHouses=0, numOfCraft=0, numOfFarms;
-    public float costMultiplier=1.8f, adderIncrease=1, multiplierIncrease=0.2f, probabilityOfCreatingARoad=0.95f, probabilityOfCreatingAddRoad=0.1f;
+    public float costMultiplier=1.8f, adderIncrease=1, multiplier=1.15f, probabilityOfCreatingARoad=0.95f, probabilityOfCreatingAddRoad=0.1f;
     public int leastAmountOfBuildingsToCreateAddRoad=10, maxWidth=950, maxHeight=550, middleWidth=670, middleheight=370, smallWidth=300, smallHeight=150, farmWidth=130, farmHeight=100, farmWdisplacement=15, farmHdisplacement=10;
     public float houseCost=20, bigHouseCost=40, craftCost=80, roadLength=5, farmCost;
     public Text houseText, bigHouseText, craftText, farmText, numOfHousesText, numOfBigHousesText, numOfCraftHousesText, numOfFarmsText;
@@ -43,6 +43,8 @@ public class BuildingsManager : MonoBehaviour
         bigHouseButton.interactable = false;
         craftButton.interactable = false;
         farmButton.interactable = false;
+
+        Balance.setMultiplier(multiplier);
     }
 
     private void FixedUpdate()
@@ -74,7 +76,7 @@ public class BuildingsManager : MonoBehaviour
     public void buyHouse()
     {
         Balance.updateBalance(houseCost);
-        Balance.updateMultiplier(multiplierIncrease);
+        Balance.updateMultiplier();
         houseCost*=costMultiplier;
         houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
         numOfHouses++;

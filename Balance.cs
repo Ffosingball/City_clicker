@@ -8,6 +8,7 @@ static public class Balance
     static private string[] powersOfTen = {"K","M","B","T","Q"};
     static private float balance=0;
     static private float multiplier=1;
+    static private float amountToMultiply=0;
     static private float adder=0;
 
     static public float getBalance(){
@@ -15,7 +16,7 @@ static public class Balance
     }
 
     static public float updateBalance(){
-        float increaseBy=(1+adder)*multiplier;
+        float increaseBy=(1+adder)*(float)Math.Pow(multiplier, amountToMultiply);
         balance += increaseBy;
         UIManager.updateText((float)Math.Round(balance));
         return increaseBy;
@@ -39,10 +40,12 @@ static public class Balance
         return multiplier;
     }
 
-    static public void updateMultiplier(float increase){
-        if(increase>0)
-            multiplier += increase;
-        //Debug.Log(multiplier);
+    static public void setMultiplier(float value){
+        multiplier=value;
+    }
+
+    static public void updateMultiplier(){
+        amountToMultiply++;
     }
 
     static public float getAdder(){

@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PassiveIncomeManager : MonoBehaviour 
 {
-    public float periodInSecondsCraft, amountToGetCraft, periodInSecondsFarm, amountToGetFarm, craftAmountMultiplier, farmAmountMultiplier, craftTimeDecrease, farmTimeDecrease, minPeriodLimitCraft, minPeriodLimitFarm;
+    public float periodInSecondsCraft, amountToGetCraft, periodInSecondsFarm, amountToGetFarm, craftAmountMultiplier=1.15f, farmAmountMultiplier=1.15f, craftTimeDecrease, farmTimeDecrease, minPeriodLimitCraft, minPeriodLimitFarm;
     public GameObject movingTextSmall;
     public float distanceToMove, textSpeedMovement;
     public bool increaseCostByBigHouses=false, increaseCostByHouses=false;
     public UpgradeBuildingsManager upgradeBuildingsManager;
-    private float currentMultipliarFarm=1, currentAdderFarm=0, currentMultipliarCraft=1, currentAdderCraft=0;
+    private float currentAdderFarm=0, currentAdderCraft=0, farmMultipleAmount=0,  craftMultipleAmount=0;
 
 
     public void increaseIncomePerHouse(int amount)
@@ -30,24 +31,24 @@ public class PassiveIncomeManager : MonoBehaviour
 
     public void increaseIncomeFarm()
     {
-        currentMultipliarFarm+=farmAmountMultiplier;
+        farmMultipleAmount++;
     }
 
 
     public void increaseIncomeCraft()
     {
-        currentMultipliarCraft+=craftAmountMultiplier;
+         craftMultipleAmount++;
     }
 
 
     public float getIncomeFarm()
     {
-        return (amountToGetFarm+currentAdderFarm)*currentMultipliarFarm;
+        return (amountToGetFarm+currentAdderFarm)*(float)Math.Pow(farmAmountMultiplier, farmMultipleAmount);
     }
 
 
     public float getIncomeCraft()
     {
-        return (amountToGetCraft+currentAdderCraft)*currentMultipliarCraft;
+        return (amountToGetCraft+currentAdderCraft)*(float)Math.Pow(craftAmountMultiplier, craftMultipleAmount);
     }
 }

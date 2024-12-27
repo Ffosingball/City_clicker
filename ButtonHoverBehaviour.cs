@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -9,7 +10,12 @@ public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointe
     private GameObject gameObject;
     public float width, height, waitFor=2f;
     public bool showAbove=true;
+    public int numOfTextToShow=-1;
+    public UIManager uIManager;
+    private Text importantText=null, otherText=null;
     private float timePassed=0;
+    private bool isShown=false;
+
 
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -50,6 +56,17 @@ public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointe
                 gameObject = Instantiate(infoPanelToShow, worldPosition, Quaternion.Euler(0,0,0));
             else
                 gameObject.transform.position = worldPosition;
+
+            if(importantText==null || otherText==null)
+            {
+                GameObject childCanva = gameObject.transform.Find("Canvas").gameObject;
+                GameObject childText = childCanva.transform.Find("ImportantInfoText").gameObject;
+                importantText = childText.GetComponent<Text>();
+                childText = childCanva.transform.Find("AdditionalInfoText").gameObject;
+                otherText = childText.GetComponent<Text>();
+            }
+
+            uIManager.textToShow[numOfTextToShow](importantText, otherText);
         }
         else
         {
