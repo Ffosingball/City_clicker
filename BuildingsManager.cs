@@ -6,9 +6,10 @@ using System;
 
 public class BuildingsManager : MonoBehaviour
 {
-    private List<Structure> allStructuresList, allBuildings;
-    private Dictionary<string, List<GameObject>> allRoadsList;
+    private List<Structure> allBuildings;
+    private Dictionary<string, List<RoadStructure>> allRoadsList;
     private Dictionary<string, GameObject> allFarms;
+    private List<PassiveIncomeStructure> allPassiveIncomesBuilds;
     [HideInInspector]
     public int numOfHouses=0, numOfBigHouses=0, numOfCraft=0, numOfFarms;
     public float costMultiplier=1.8f, adderIncrease=1, multiplier=1.15f, probabilityOfCreatingARoad=0.95f, probabilityOfCreatingAddRoad=0.1f;
@@ -25,10 +26,10 @@ public class BuildingsManager : MonoBehaviour
 
     private void Start()
     {
-        allStructuresList = new List<Structure>();
         allBuildings = new List<Structure>();
-        allRoadsList = new Dictionary<string, List<GameObject>>();
+        allRoadsList = new Dictionary<string, List<RoadStructure>>();
         allFarms = new Dictionary<string, GameObject>();
+        allPassiveIncomesBuilds = new List<PassiveIncomeStructure>();
 
         houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
         bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
@@ -145,18 +146,27 @@ public class BuildingsManager : MonoBehaviour
     {
         string key="";
         int y=-1, x=-1;
+        int houseNum = UnityEngine.Random.Range(0,structures.Length);
+        Structure newStruct;
+        PassiveIncomeStructure newStructPass;
+
         switch(type)
         {
             case "CraftHouse":
                 y = UnityEngine.Random.Range(-(smallHeight),(smallHeight)+1);
                 x = UnityEngine.Random.Range(-(smallWidth),(smallWidth)+1);
+                newStructPass = new PassiveIncomeStructure(x,y,type,houseNum,0,"");
+                allPassiveIncomesBuilds.Add(newStructPass);
+                newStruct = newStructPass;
                 break;
             case "House":
                 generateRandomBetween(-middleWidth,middleWidth,-middleheight,middleheight,-smallWidth,smallWidth,-smallHeight,smallHeight,out x, out y);
+                newStruct = new Structure(x,y,type,houseNum);
                 break;
             case "BigHouse":
                 y = UnityEngine.Random.Range(-(middleheight),(middleheight)+1);
                 x = UnityEngine.Random.Range(-(middleWidth),(middleWidth)+1);
+                newStruct = new Structure(x,y,type,houseNum);
                 break;
             case "Farm":
                 generateRandomBetween(-maxWidth/farmWidth,maxWidth/farmWidth,-maxHeight/farmHeight,maxHeight/farmHeight,-(middleWidth+farmWidth)/farmWidth,(middleWidth+farmWidth)/farmWidth,-(middleheight+farmHeight)/farmHeight,(middleheight+farmHeight)/farmHeight,out x, out y);
@@ -171,17 +181,17 @@ public class BuildingsManager : MonoBehaviour
                 key=x+","+y+"";
                 x=(x*farmWidth)+UnityEngine.Random.Range(-farmWdisplacement,farmWdisplacement);
                 y=(y*farmHeight)+UnityEngine.Random.Range(-farmHdisplacement,farmHdisplacement);
+                newStructPass = new PassiveIncomeStructure(x,y,type,houseNum,0,key);
+                allPassiveIncomesBuilds.Add(newStructPass);
+                newStruct = newStructPass;
                 break;
             default:
                 Debug.Log("Unknown building type!");
+                newStruct = new Structure(0,0,"",0);
                 break;
         }
 
-        int houseNum = UnityEngine.Random.Range(0,structures.Length);
-
         GameObject newHouse = Instantiate(structures[houseNum], new Vector3(x,y,y+maxHeight), Quaternion.Euler(0f,0f,0f));
-        Structure newStruct = new Structure(newHouse,x,y,type);
-        allStructuresList.Add(newStruct);
         allBuildings.Add(newStruct);
 
         if(type=="Farm")
@@ -281,43 +291,44 @@ public class BuildingsManager : MonoBehaviour
 
     private void createRoad(int x1, int y1, int x2, int y2, int i1, int i2)
     {
-        List<GameObject> tempPartsOfRoad = new List<GameObject>();
+        List<RoadStructure> tempPartsOfRoad = new List<RoadStructure>();
         //Debug.Log("Coord1: "+x1+", "+y1+"; Coord2: "+x2+", "+y2+"; ids: "+i1+", "+i2);
+        string key = i1+","+i2+"";
 
         if(UnityEngine.Random.Range(0f,1f)<probabilityOfCreatingARoad)
         {
             if(UnityEngine.Random.Range(0,2)==0)
             {
                 if(y1>y2)
-                    tempPartsOfRoad.Add(createVerticalRoad(y1,y1,y2,x1,-1));
+                    tempPartsOfRoad.Add(createVerticalRoad(y1,y1,y2,x1,-1,key));
                 else
-                    tempPartsOfRoad.Add(createVerticalRoad(y2,y1,y2,x1,1));
+                    tempPartsOfRoad.Add(createVerticalRoad(y2,y1,y2,x1,1,key));
 
                 if(x1>x2)
-                    tempPartsOfRoad.Add(createHorizontalRoad(y2,x1,x2,-1));
+                    tempPartsOfRoad.Add(createHorizontalRoad(y2,x1,x2,-1,key));
                 else
-                    tempPartsOfRoad.Add(createHorizontalRoad(y2,x1,x2,1));
+                    tempPartsOfRoad.Add(createHorizontalRoad(y2,x1,x2,1,key));
             }
             else
             {
                 if(x1>x2)
-                    tempPartsOfRoad.Add(createHorizontalRoad(y1,x1,x2,-1));
+                    tempPartsOfRoad.Add(createHorizontalRoad(y1,x1,x2,-1,key));
                 else
-                    tempPartsOfRoad.Add(createHorizontalRoad(y1,x1,x2,1));
+                    tempPartsOfRoad.Add(createHorizontalRoad(y1,x1,x2,1,key));
 
                 if(y1>y2)
-                    tempPartsOfRoad.Add(createVerticalRoad(y1,y1,y2,x2,-1));
+                    tempPartsOfRoad.Add(createVerticalRoad(y1,y1,y2,x2,-1,key));
                 else
-                    tempPartsOfRoad.Add(createVerticalRoad(y2,y1,y2,x2,1));
+                    tempPartsOfRoad.Add(createVerticalRoad(y2,y1,y2,x2,1,key));
             }
         }
 
-        allRoadsList.Add(i1+","+i2+"",tempPartsOfRoad);
+        allRoadsList.Add(key,tempPartsOfRoad);
         //Debug.Log(i1+""+i2+"");
     }
 
 
-    public GameObject createVerticalRoad(int h, int y1, int y2, int x, int operand)
+    public RoadStructure createVerticalRoad(int h, int y1, int y2, int x, int operand,string key)
     {   
         int y;
         if(operand==-1)
@@ -327,12 +338,12 @@ public class BuildingsManager : MonoBehaviour
 
         GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,y,h+20+maxHeight), Quaternion.Euler(0f,0f,0f));
         newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
-        allStructuresList.Add(new Structure(newPart,x,y,"RoadPart"));
-        return newPart;
+        RoadStructure road = new RoadStructure(x,y,"Road",0,roadLength,Math.Abs(y1-y2),key);
+        return road;
     }
 
 
-    public GameObject createHorizontalRoad(int height, int x1, int x2, int operand)
+    public RoadStructure createHorizontalRoad(int height, int x1, int x2, int operand, string key)
     {
         int x;
         if(operand==-1)
@@ -342,7 +353,7 @@ public class BuildingsManager : MonoBehaviour
 
         GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,height,height+20+maxHeight), Quaternion.Euler(0f,0f,0f));
         newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
-        allStructuresList.Add(new Structure(newPart,x,height,"RoadPart"));
-        return newPart;
+        RoadStructure road = new RoadStructure(x,height,"Road",0,Math.Abs(x1-x2),roadLength,key);
+        return road;
     }
 }

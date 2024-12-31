@@ -1,17 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+
+[Serializable]
 public class Structure
 {
-    private GameObject structure;
-    private int x, y, id;
+    private int x, y, id, structNum;
     private static int lastID=0;
     private string type;
 
-    public Structure(GameObject structure, int x, int y, string type)
+    public Structure(int x, int y, string type, int structNum)
     {
-        this.structure = structure;
         this.x = x;
         this.y = y;
         id=lastID;
@@ -24,8 +25,7 @@ public class Structure
     public int getY(){return y;}
 
     public int getID(){return id;}
-
-    public GameObject getStructure(){return structure;}
+    public int getStructNum(){return structNum;}
 
     public string getType(){return type;}
 }

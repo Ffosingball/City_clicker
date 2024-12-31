@@ -7,15 +7,20 @@ using System;
 public class UIManager : MonoBehaviour
 {
     public GameObject[] sidePanels;
-    public GameObject mainPanel, hidedPanel;
+    public GameObject mainPanel, hidedPanel, rewritePanel, warningPanel;
     private GameObject currentPanel;
     private static Text balanceText;
     public Text balanceTextNonStatic;
     public BuildingsManager buildingsManager;
     public UpgradeBuildingsManager upgradeBuildingsmanager;
     public PassiveIncomeManager passiveIncomeManager;
+    public Button[] loadsBut, saveBut;
+    public Button mainSaveBut, yesSaveBut, noSaveBut, mainLoadBut, yesLoadBut, noLoadBut;
+    public SavesManager savesManager;
+    public Text[] saveNloadText;
     [HideInInspector]
     public Action<Text,Text>[] textToShow;
+    private int saveChoosed=-1;
 
 
     private void Awake()
@@ -34,6 +39,51 @@ public class UIManager : MonoBehaviour
         textToShow[7] = decreaseCost2Text;
         textToShow[8] = increaseIncome1Text;
         textToShow[9] = increaseIncome2Text;
+
+        ResetButtonColorSave();
+        ResetButtonColorLoad();
+    }
+
+
+    private void Update()
+    {
+        if (currentPanel == sidePanels[5])
+        {
+            for(int i=0; i<loadsBut.Length; i++)
+            {
+                if(savesManager.checkSaves(i))
+                {
+                    loadsBut[i].interactable = true;
+                    saveNloadText[i+5].text=savesManager.getSaveName(i);
+                }
+                else
+                {
+                    loadsBut[i].interactable = false;
+                    saveNloadText[i+5].text="No save";
+                }
+            }
+
+            if(saveChoosed==-1)
+                mainLoadBut.interactable = false;
+            else
+                mainLoadBut.interactable = true;
+        }
+
+        if (currentPanel == sidePanels[4])
+        {
+            for(int i=0; i<saveBut.Length; i++)
+            {
+                if(savesManager.checkSaves(i))
+                    saveNloadText[i].text=savesManager.getSaveName(i);
+                else
+                    saveNloadText[i].text="No save";
+            }
+
+            if(saveChoosed==-1)
+                mainSaveBut.interactable = false;
+            else
+                mainSaveBut.interactable = true;
+        }
     }
 
 
@@ -65,6 +115,22 @@ public class UIManager : MonoBehaviour
         currentPanel=sidePanels[3];
     }
 
+    public void saveButton()
+    {
+        currentPanel.SetActive(false);
+        sidePanels[4].SetActive(true);
+        currentPanel=sidePanels[4];
+        saveChoosed=-1;
+    }
+
+    public void loadButton()
+    {
+        currentPanel.SetActive(false);
+        sidePanels[5].SetActive(true);
+        currentPanel=sidePanels[5];
+        saveChoosed=-1;
+    }
+
     public void hideUIButton()
     {
         currentPanel.SetActive(false);
@@ -77,6 +143,157 @@ public class UIManager : MonoBehaviour
         hidedPanel.SetActive(false);
         currentPanel.SetActive(true);
         mainPanel.SetActive(true);
+    }
+
+    public void save1Button()
+    {
+        saveChoosed=0;
+        ResetButtonColorSave();
+        ModifyOutline(saveBut[0]);
+    }
+
+    public void save2Button()
+    {
+        saveChoosed=1;
+        ResetButtonColorSave();
+        ModifyOutline(saveBut[1]);
+    }
+
+    public void save3Button()
+    {
+        saveChoosed=2;
+        ResetButtonColorSave();
+        ModifyOutline(saveBut[2]);
+    }
+
+    public void save4Button()
+    {
+        saveChoosed=3;
+        ResetButtonColorSave();
+        ModifyOutline(saveBut[3]);
+    }
+
+    public void save5Button()
+    {
+        saveChoosed=4;
+        ResetButtonColorSave();
+        ModifyOutline(saveBut[4]);
+    }
+
+    public void load1Button()
+    {
+        saveChoosed=0;
+        ResetButtonColorLoad();
+        ModifyOutline(loadsBut[0]);
+    }
+
+    public void load2Button()
+    {
+        saveChoosed=1;
+        ResetButtonColorLoad();
+        ModifyOutline(loadsBut[1]);
+    }
+
+    public void load3Button()
+    {
+        saveChoosed=2;
+        ResetButtonColorLoad();
+        ModifyOutline(loadsBut[2]);
+    }
+
+    public void load4Button()
+    {
+        saveChoosed=3;
+        ResetButtonColorLoad();
+        ModifyOutline(loadsBut[3]);
+    }
+
+    public void load5Button()
+    {
+        saveChoosed=4;
+        ResetButtonColorLoad();
+        ModifyOutline(loadsBut[4]);
+    }
+
+
+    public void backButtonSaveNLoad()
+    {
+        currentPanel.SetActive(false);
+        sidePanels[0].SetActive(true);
+        currentPanel=sidePanels[0];
+        ResetButtonColorLoad();
+        ResetButtonColorSave();
+    }
+
+
+    //switch of outline of the button
+    public void ResetButtonColorLoad()
+    {
+        foreach(Button button in loadsBut)
+        {
+            button.GetComponent<Outline>().enabled=false;
+        }
+    }
+
+
+    public void ResetButtonColorSave()
+    {
+        foreach(Button button in saveBut)
+        {
+            button.GetComponent<Outline>().enabled=false;
+        }
+    }
+
+
+    //Switch on the outline of the button
+    private void ModifyOutline(Button button)
+    {
+        var outline = button.GetComponent<Outline>().enabled=true;
+    }
+
+
+
+
+
+
+    public void chooseThisSaveToLoad()
+    {
+        warningPanel.SetActive(true);
+    }
+
+    public void yesLoad()
+    {
+        savesManager.LoadFrom(saveChoosed);
+        saveChoosed=-1;
+        warningPanel.SetActive(false);
+    }
+
+    public void noLoad()
+    {
+        warningPanel.SetActive(false);
+    }
+
+    public void chooseThisSaveSave()
+    {
+        if(savesManager.checkSaves(saveChoosed))
+            rewritePanel.SetActive(true);
+        else
+        {
+            savesManager.SaveTo(saveChoosed);
+            saveChoosed=-1;
+        }
+    }
+
+    public void yesSave()
+    {
+        savesManager.SaveTo(saveChoosed);
+        saveChoosed=-1;
+        warningPanel.SetActive(false);
+    }
+
+    public void noSave()
+    {
+        rewritePanel.SetActive(false);
     }
 
     public static void updateText(float n)
