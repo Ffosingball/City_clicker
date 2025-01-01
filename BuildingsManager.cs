@@ -6,10 +6,14 @@ using System;
 
 public class BuildingsManager : MonoBehaviour
 {
-    private List<Structure> allBuildings;
-    private Dictionary<string, List<RoadStructure>> allRoadsList;
-    private Dictionary<string, GameObject> allFarms;
-    private List<PassiveIncomeStructure> allPassiveIncomesBuilds;
+    [HideInInspector]
+    public List<Structure> allBuildings;
+    [HideInInspector]
+    public Dictionary<string, List<RoadStructure>> allRoadsList;
+    [HideInInspector]
+    public Dictionary<string, GameObject> allFarms;
+    [HideInInspector]
+    public List<PassiveIncomeStructure> allPassiveIncomesBuilds;
     [HideInInspector]
     public int numOfHouses=0, numOfBigHouses=0, numOfCraft=0, numOfFarms;
     public float costMultiplier=1.8f, adderIncrease=1, multiplier=1.15f, probabilityOfCreatingARoad=0.95f, probabilityOfCreatingAddRoad=0.1f;
@@ -155,7 +159,7 @@ public class BuildingsManager : MonoBehaviour
             case "CraftHouse":
                 y = UnityEngine.Random.Range(-(smallHeight),(smallHeight)+1);
                 x = UnityEngine.Random.Range(-(smallWidth),(smallWidth)+1);
-                newStructPass = new PassiveIncomeStructure(x,y,type,houseNum,0,"");
+                newStructPass = new PassiveIncomeStructure(x,y,type,houseNum,"");
                 allPassiveIncomesBuilds.Add(newStructPass);
                 newStruct = newStructPass;
                 break;
@@ -181,7 +185,7 @@ public class BuildingsManager : MonoBehaviour
                 key=x+","+y+"";
                 x=(x*farmWidth)+UnityEngine.Random.Range(-farmWdisplacement,farmWdisplacement);
                 y=(y*farmHeight)+UnityEngine.Random.Range(-farmHdisplacement,farmHdisplacement);
-                newStructPass = new PassiveIncomeStructure(x,y,type,houseNum,0,key);
+                newStructPass = new PassiveIncomeStructure(x,y,type,houseNum,key);
                 allPassiveIncomesBuilds.Add(newStructPass);
                 newStruct = newStructPass;
                 break;

@@ -36,8 +36,8 @@ static public class Balance
         UIManager.updateText((float)Math.Round(balance));
     }
 
-    static public float getMultiplier(){
-        return multiplier;
+    static public float getAmountToMultiply(){
+        return amountToMultiply;
     }
 
     static public void setMultiplier(float value){

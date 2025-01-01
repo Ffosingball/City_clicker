@@ -288,7 +288,7 @@ public class UIManager : MonoBehaviour
     {
         savesManager.SaveTo(saveChoosed);
         saveChoosed=-1;
-        warningPanel.SetActive(false);
+        rewritePanel.SetActive(false);
     }
 
     public void noSave()

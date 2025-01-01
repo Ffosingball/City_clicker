@@ -10,7 +10,8 @@ public class PassiveIncomeManager : MonoBehaviour
     public float distanceToMove, textSpeedMovement;
     public bool increaseCostByBigHouses=false, increaseCostByHouses=false;
     public UpgradeBuildingsManager upgradeBuildingsManager;
-    private float currentAdderFarm=0, currentAdderCraft=0, farmMultipleAmount=0,  craftMultipleAmount=0;
+    [HideInInspector]
+    public float currentAdderFarm=0, currentAdderCraft=0, farmMultipleAmount=0,  craftMultipleAmount=0;
 
 
     public void increaseIncomePerHouse(int amount)

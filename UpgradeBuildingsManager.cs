@@ -10,7 +10,9 @@ public class UpgradeBuildingsManager : MonoBehaviour
     public float costMultiplier = 1.5f, craftUpgradeCost=40000, farmUpgradeCost=100000, upgradeIncomeFromBuild1Cost=100000, upgradeIncomeFromBuild2Cost=1000000, decreaseCost1=200000, decreaseCost2=500000, decreaseCostBy=5, increaseIncomePerHouseBy=100, increaseIncomePerBigHouseBy=10;
     public Text craftUpgradeCostText, farmUpgradeCostText, craftLevelText, farmLevelText, upgradeIncomeText1, upgradeIncomeText2, decreaseCostText1, decreaseCostText2;
     public Button craftUpgradeButton, farmUpgradeButton, upgradeIncomeButton1, upgradeIncomeButton2, decreaseCostButton1, decreaseCostButton2;
-    private int craftUpgrades=0, farmUpgrades=0;
+    [HideInInspector]
+    public int craftUpgrades=0, farmUpgrades=0;
+    [HideInInspector]
     public bool incomeIncreased1=false, incomeIncreased2=false, costDecreased1=false, costDecreased2=false;
 
 
