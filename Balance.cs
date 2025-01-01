@@ -40,6 +40,10 @@ static public class Balance
         return amountToMultiply;
     }
 
+    static public void setAmountToMultiply(float value){
+        amountToMultiply=value;
+    }
+
     static public void setMultiplier(float value){
         multiplier=value;
     }
@@ -50,6 +54,10 @@ static public class Balance
 
     static public float getAdder(){
         return adder;
+    }
+
+    static public void setAdder(float value){
+        adder=value;
     }
 
     static public void updateAdder(float increase){

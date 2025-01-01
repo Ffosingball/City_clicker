@@ -6,6 +6,7 @@ using System;
 
 public class BuildingsManager : MonoBehaviour
 {
+    private List<GameObject> allStructures;
     [HideInInspector]
     public List<Structure> allBuildings;
     [HideInInspector]
@@ -34,20 +35,9 @@ public class BuildingsManager : MonoBehaviour
         allRoadsList = new Dictionary<string, List<RoadStructure>>();
         allFarms = new Dictionary<string, GameObject>();
         allPassiveIncomesBuilds = new List<PassiveIncomeStructure>();
+        allStructures = new List<GameObject>();
 
-        houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
-        bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
-        craftText.text="\n"+Balance.outputCostCorrectly(craftCost);
-        farmText.text="\n"+Balance.outputCostCorrectly(farmCost);
-        numOfHousesText.text="";
-        numOfBigHousesText.text="";
-        numOfCraftHousesText.text="";
-        numOfFarmsText.text="";
-
-        houseButton.interactable = false;
-        bigHouseButton.interactable = false;
-        craftButton.interactable = false;
-        farmButton.interactable = false;
+        resetUI();
 
         Balance.setMultiplier(multiplier);
     }
@@ -197,6 +187,7 @@ public class BuildingsManager : MonoBehaviour
 
         GameObject newHouse = Instantiate(structures[houseNum], new Vector3(x,y,y+maxHeight), Quaternion.Euler(0f,0f,0f));
         allBuildings.Add(newStruct);
+        allStructures.Add(newHouse);
 
         if(type=="Farm")
             allFarms.Add(key,newHouse);
@@ -342,7 +333,8 @@ public class BuildingsManager : MonoBehaviour
 
         GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,y,h+20+maxHeight), Quaternion.Euler(0f,0f,0f));
         newPart.transform.localScale=new Vector3(roadLength,Math.Abs(y1-y2),1);
-        RoadStructure road = new RoadStructure(x,y,"Road",0,roadLength,Math.Abs(y1-y2),key);
+        RoadStructure road = new RoadStructure(x,y,"Road",0,roadLength,Math.Abs(y1-y2),key,h+20+maxHeight);
+        allStructures.Add(newPart);
         return road;
     }
 
@@ -357,7 +349,147 @@ public class BuildingsManager : MonoBehaviour
 
         GameObject newPart = Instantiate(roadTypes[0], new Vector3(x,height,height+20+maxHeight), Quaternion.Euler(0f,0f,0f));
         newPart.transform.localScale=new Vector3(Math.Abs(x1-x2),roadLength,1);
-        RoadStructure road = new RoadStructure(x,height,"Road",0,Math.Abs(x1-x2),roadLength,key);
+        RoadStructure road = new RoadStructure(x,height,"Road",0,Math.Abs(x1-x2),roadLength,key,height+20+maxHeight);
+        allStructures.Add(newPart);
         return road;
+    }
+
+
+    public void resetUI()
+    {
+        houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
+        bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
+        craftText.text="\n"+Balance.outputCostCorrectly(craftCost);
+        farmText.text="\n"+Balance.outputCostCorrectly(farmCost);
+
+        if(numOfHouses==0)
+            numOfHousesText.text="";
+        else
+            numOfHousesText.text="X"+numOfHouses;
+
+        if(numOfBigHouses==0)
+            numOfBigHousesText.text="";
+        else
+            numOfBigHousesText.text="X"+numOfBigHouses;
+
+        if(numOfCraft==0)
+            numOfCraftHousesText.text="";
+        else
+            numOfCraftHousesText.text="X"+numOfCraft;
+
+        if(numOfFarms==0)
+            numOfFarmsText.text="";
+        else
+            numOfFarmsText.text="X"+numOfFarms;
+
+        houseButton.interactable = false;
+        bigHouseButton.interactable = false;
+        craftButton.interactable = false;
+        farmButton.interactable = false;
+    }
+
+
+    public void resetBuildings(GameData data)
+    {
+        bigHouseCost = data.bigHouseCost;
+        houseCost = data.houseCost;
+        farmCost = data.farmCost;
+        craftCost = data.craftCost;
+        numOfHouses = data.numOfHouses;
+        numOfBigHouses = data.numOfBigHouses;
+        numOfFarms = data.numOfFarms;
+        numOfCraft = data.numOfCrafts;
+
+        foreach(GameObject building in allStructures)
+        {
+            Destroy(building);
+        }
+
+        allBuildings = data.usualBuildingsList;
+        allPassiveIncomesBuilds = data.specialBildingsList;
+        
+        List<RoadStructure> tempRoadList = data.roadList;
+        allRoadsList.Clear();
+        string key = "";
+        List<RoadStructure> roadsWithKey = new List<RoadStructure>();
+        foreach(RoadStructure road in tempRoadList)
+        {
+            if(key==road.getKey())
+                roadsWithKey.Add(road);
+            else
+            {
+                if(key!="")
+                    allRoadsList.Add(key,roadsWithKey);
+                
+                key=road.getKey();
+                roadsWithKey.Clear();
+                roadsWithKey.Add(road);
+            }
+        }
+        
+        allFarms.Clear();
+        allStructures.Clear();
+
+        resetUI();
+        recreateBuildings(tempRoadList);
+
+        Debug.Log("Done!");
+    }
+
+
+    public void recreateBuildings(List<RoadStructure> roadList)
+    {
+        //Recreate all structures
+        int specialBuildsIndex=0;
+        foreach(Structure someStruct in allBuildings)
+        {
+            Debug.Log("Here");
+            GameObject newHouse;
+            switch(someStruct.getType())
+            {
+                case "CraftHouse":
+                    newHouse = Instantiate(craftBuildings[someStruct.getStructNum()], new Vector3(someStruct.getX(),someStruct.getY(),someStruct.getY()+maxHeight), Quaternion.Euler(0f,0f,0f));
+                    CraftHouseBehaviour behaviour1 = newHouse.GetComponent<CraftHouseBehaviour>();
+                    behaviour1.timeLeft = UnityEngine.Random.Range(0,passiveIncomeManager.periodInSecondsCraft);
+                    behaviour1.passiveIncomeManager = passiveIncomeManager;
+                    specialBuildsIndex++;
+                    Debug.Log("craft");
+                    break;
+                case "House":
+                    newHouse = Instantiate(houses[someStruct.getStructNum()], new Vector3(someStruct.getX(),someStruct.getY(),someStruct.getY()+maxHeight), Quaternion.Euler(0f,0f,0f));
+                    Debug.Log("house");
+                    break;
+                case "BigHouse":
+                    newHouse = Instantiate(bigHouses[someStruct.getStructNum()], new Vector3(someStruct.getX(),someStruct.getY(),someStruct.getY()+maxHeight), Quaternion.Euler(0f,0f,0f));
+                    Debug.Log("bighouse");
+                    break;
+                case "Farm":
+                    newHouse = Instantiate(farmingBuildings[someStruct.getStructNum()], new Vector3(someStruct.getX(),someStruct.getY(),someStruct.getY()+maxHeight), Quaternion.Euler(0f,0f,0f));
+                    FarmBehaviour behaviour2 = newHouse.GetComponent<FarmBehaviour>();
+                    behaviour2.timeLeft = UnityEngine.Random.Range(0,passiveIncomeManager.periodInSecondsCraft);
+                    behaviour2.passiveIncomeManager = passiveIncomeManager;
+                    specialBuildsIndex++;
+                    Debug.Log("farm");
+                    break;
+                default:
+                    Debug.Log("Unknown building type!");
+                    newHouse=null;
+                    break;
+            }
+
+            allStructures.Add(newHouse);
+
+            if(someStruct.getType()=="Farm")
+                allFarms.Add(allPassiveIncomesBuilds[specialBuildsIndex].getKey(),newHouse);
+        }
+
+        //Recreate all roads
+        foreach(RoadStructure road in roadList)
+        {
+            GameObject newPart = Instantiate(roadTypes[0], new Vector3(road.getX(),road.getY(),road.getZHeight()), Quaternion.Euler(0f,0f,0f));
+            newPart.transform.localScale=new Vector3(road.getWidth(),road.getHeight(),1);
+            allStructures.Add(newPart);
+        }
+
     }
 }

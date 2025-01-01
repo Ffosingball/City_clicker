@@ -6,7 +6,8 @@ using System;
 
 public class CraftHouseBehaviour : MonoBehaviour
 {
-    private float timeLeft;
+    [HideInInspector]
+    public float timeLeft;
     private Vector3 coords;
     public PassiveIncomeManager passiveIncomeManager;
 

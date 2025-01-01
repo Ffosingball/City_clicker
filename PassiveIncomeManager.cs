@@ -52,4 +52,15 @@ public class PassiveIncomeManager : MonoBehaviour
     {
         return (amountToGetCraft+currentAdderCraft)*(float)Math.Pow(craftAmountMultiplier, craftMultipleAmount);
     }
+
+
+    public void resetPassiveIncome(GameData data)
+    {
+        farmAmountMultiplier = data.passIncMultiplierFarm;
+        periodInSecondsFarm = data.passIncTimeFarm;
+        currentAdderFarm = data.passIncAdderFarm;
+        craftAmountMultiplier = data.passIncMultiplierCraft;
+        periodInSecondsCraft = data.passIncTimeCraft;
+        currentAdderCraft = data.passIncAdderCraft;
+    }
 }

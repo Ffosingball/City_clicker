@@ -10,8 +10,8 @@ public class GameData
     public List<RoadStructure> roadList;
     public List<PassiveIncomeStructure> specialBildingsList;
     public float balance, adder, multiplierExponent, houseCost, bigHouseCost, farmCost, craftCost;
-    public int levelFarm, levelCraft;
-    public float passIncAdderFarm, passIncMultiplierFarm, passIncTimeFarm, passIncAdderCraft, passIncMultiplierCraft, passIncTimeCraft;
+    public int levelFarm, levelCraft, numOfBigHouses, numOfHouses, numOfFarms, numOfCrafts;
+    public float passIncAdderFarm, passIncMultiplierFarm, passIncTimeFarm, passIncAdderCraft, passIncMultiplierCraft, passIncTimeCraft, farmUpgradeCost, craftUpgradeCost;
     public bool increasedIncome1, increasedIncome2, decreasedCost1, decreasedCost2;
 
     public GameData(float balance, float adder, float multiplierExponent)
@@ -30,7 +30,7 @@ public class GameData
     }
 
 
-    public void setBuildingsInfo(float houseCost, float bigHouseCost, float farmCost, float craftCost, int levelFarm, int levelCraft)
+    public void setBuildingsInfo(float houseCost, float bigHouseCost, float farmCost, float craftCost, int levelFarm, int levelCraft, int numOfBigHouses, int numOfHouses, int numOfFarms, int numOfCrafts)
     {
         this.houseCost=houseCost;
         this.bigHouseCost=bigHouseCost;
@@ -38,6 +38,10 @@ public class GameData
         this.craftCost=craftCost;
         this.levelFarm=levelFarm;
         this.levelCraft=levelCraft;
+        this.numOfBigHouses=numOfBigHouses;
+        this.numOfFarms=numOfFarms;
+        this.numOfCrafts=numOfCrafts;
+        this.numOfHouses = numOfHouses;
     }
 
 
@@ -52,16 +56,13 @@ public class GameData
     }
 
 
-    public void setUpgradeInfo(bool increasedIncome1, bool increasedIncome2, bool decreasedCost1, bool decreasedCost2)
+    public void setUpgradeInfo(bool increasedIncome1, bool increasedIncome2, bool decreasedCost1, bool decreasedCost2, float farmUpgradeCost, float craftUpgradeCost)
     {
         this.increasedIncome1=increasedIncome1;
         this.increasedIncome2=increasedIncome2;
         this.decreasedCost1=decreasedCost1;
         this.decreasedCost2=decreasedCost2;
-    }
-
-    public List<Structure> getUsualBuildingsList()
-    {
-        return usualBuildingsList;
+        this.farmUpgradeCost = farmUpgradeCost;
+        this.craftUpgradeCost = craftUpgradeCost;
     }
 }

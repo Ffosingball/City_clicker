@@ -60,10 +60,10 @@ public class SavesManager : MonoBehaviour
 
         data.setBuildingsLists(buildingsManager.allBuildings, tempRoadList, buildingsManager.allPassiveIncomesBuilds);
     
-        Debug.Log("Length: "+data.getUsualBuildingsList().Count);
+        //Debug.Log("Length: "+data.getUsualBuildingsList().Count);
 
-        data.setBuildingsInfo(buildingsManager.houseCost,buildingsManager.bigHouseCost,buildingsManager.farmCost,buildingsManager.craftCost,upgradeBuildingsManager.farmUpgrades,upgradeBuildingsManager.craftUpgrades);
-        data.setUpgradeInfo(upgradeBuildingsManager.incomeIncreased1,upgradeBuildingsManager.incomeIncreased2,upgradeBuildingsManager.costDecreased1,upgradeBuildingsManager.costDecreased2);
+        data.setBuildingsInfo(buildingsManager.houseCost,buildingsManager.bigHouseCost,buildingsManager.farmCost,buildingsManager.craftCost,upgradeBuildingsManager.farmUpgrades,upgradeBuildingsManager.craftUpgrades,buildingsManager.numOfBigHouses,buildingsManager.numOfHouses,buildingsManager.numOfFarms,buildingsManager.numOfCraft);
+        data.setUpgradeInfo(upgradeBuildingsManager.incomeIncreased1,upgradeBuildingsManager.incomeIncreased2,upgradeBuildingsManager.costDecreased1,upgradeBuildingsManager.costDecreased2,upgradeBuildingsManager.farmUpgradeCost,upgradeBuildingsManager.craftUpgradeCost);
         data.setPassiveIncomeInfo(passiveIncomeManager.currentAdderFarm,passiveIncomeManager.farmMultipleAmount,passiveIncomeManager.periodInSecondsFarm,passiveIncomeManager.currentAdderCraft,passiveIncomeManager.craftMultipleAmount,passiveIncomeManager.periodInSecondsCraft);
     
         SaveSystem.SaveGame(saveNumber, data);
@@ -74,9 +74,22 @@ public class SavesManager : MonoBehaviour
     public void LoadFrom(int saveNumber)
     {
         GameData data = SaveSystem.LoadGame(saveNumber);
+        //Debug.Log("Length: "+data.getUsualBuildingsList().Count);
 
-        Debug.Log("Length: "+data.getUsualBuildingsList().Count);
+        passiveIncomeManager.resetPassiveIncome(data);
+        upgradeBuildingsManager.resetUpgrades(data);
+        buildingsManager.resetBuildings(data);
+        resetBalance(data);
 
         Debug.Log("Loaded");
+    }
+
+
+    public void resetBalance(GameData data)
+    {
+        Balance.updateBalance(Balance.getBalance());
+        Balance.increaseBalance(data.balance);
+        Balance.setAdder(data.adder);
+        Balance.setAmountToMultiply(data.multiplierExponent);
     }
 }
