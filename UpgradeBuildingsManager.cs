@@ -130,10 +130,26 @@ public class UpgradeBuildingsManager : MonoBehaviour
     {
         craftUpgradeCostText.text="\n"+Balance.outputCostCorrectly(craftUpgradeCost);
         farmUpgradeCostText.text="\n"+Balance.outputCostCorrectly(farmUpgradeCost);
-        upgradeIncomeText1.text = "\n"+Balance.outputCostCorrectly(upgradeIncomeFromBuild1Cost);
-        upgradeIncomeText2.text = "\n\n"+Balance.outputCostCorrectly(upgradeIncomeFromBuild2Cost);
-        decreaseCostText1.text = "\n"+Balance.outputCostCorrectly(decreaseCost1);
-        decreaseCostText2.text = "\n"+Balance.outputCostCorrectly(decreaseCost2);
+
+        if(incomeIncreased1)
+            upgradeIncomeText1.text = "\n Done!";
+        else
+            upgradeIncomeText1.text = "\n"+Balance.outputCostCorrectly(upgradeIncomeFromBuild1Cost);
+        
+        if(incomeIncreased2)
+            upgradeIncomeText2.text = "\n Done!";
+        else
+            upgradeIncomeText2.text = "\n"+Balance.outputCostCorrectly(upgradeIncomeFromBuild2Cost);
+        
+        if(costDecreased1)
+            decreaseCostText1.text = "\n Done!";
+        else
+            decreaseCostText1.text = "\n"+Balance.outputCostCorrectly(decreaseCost1);
+        
+        if(costDecreased2)
+            decreaseCostText2.text = "\n Done!";
+        else
+            decreaseCostText2.text = "\n"+Balance.outputCostCorrectly(decreaseCost2);
 
         craftLevelText.text="Lv. "+craftUpgrades;
         farmLevelText.text="Lv. "+farmUpgrades;

@@ -7,7 +7,7 @@ using System;
 public class CraftHouseBehaviour : MonoBehaviour
 {
     [HideInInspector]
-    public float timeLeft;
+    public float timeLeft=-1;
     private Vector3 coords;
     public PassiveIncomeManager passiveIncomeManager;
 
@@ -23,7 +23,10 @@ public class CraftHouseBehaviour : MonoBehaviour
     {
         while(true)
         {
-            timeLeft=passiveIncomeManager.periodInSecondsCraft;
+            if(timeLeft<=0)
+            {
+                timeLeft=passiveIncomeManager.periodInSecondsCraft;
+            }
 
             while(timeLeft>0)
             {
@@ -31,6 +34,7 @@ public class CraftHouseBehaviour : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
             }
 
+            yield return new WaitForSeconds(0.1f);
             Balance.increaseBalance(passiveIncomeManager.getIncomeCraft());
             createText();
         }
@@ -41,6 +45,7 @@ public class CraftHouseBehaviour : MonoBehaviour
     {
         coords.z=2;
         GameObject movingTextCur = Instantiate(passiveIncomeManager.movingTextSmall, coords, Quaternion.Euler(0f,0f,0f));
+        TempObjects.tempObjectsList.Add(movingTextCur);
         //Find child gameObject of the created gameObject by its name
         GameObject childCanva = movingTextCur.transform.Find("MovingText").gameObject;
         //And again

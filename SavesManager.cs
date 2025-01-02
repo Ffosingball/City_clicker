@@ -40,6 +40,14 @@ public class SavesManager : MonoBehaviour
     }
 
 
+    public void deleteSave(int saveNumber)
+    {
+        saveNames[saveNumber]="";
+        SaveSystem.DeleteSave(saveNumber);
+        SaveSystem.SaveNames(saveNames);
+    }
+
+
     public void SaveTo(int saveNumber)
     {
         // Get the current date and time
@@ -76,12 +84,19 @@ public class SavesManager : MonoBehaviour
         GameData data = SaveSystem.LoadGame(saveNumber);
         //Debug.Log("Length: "+data.getUsualBuildingsList().Count);
 
+        foreach(GameObject tempObject in TempObjects.tempObjectsList)
+        {
+            if(tempObject!=null)
+                Destroy(tempObject);
+        }
+        TempObjects.tempObjectsList.Clear();
+
         passiveIncomeManager.resetPassiveIncome(data);
         upgradeBuildingsManager.resetUpgrades(data);
         buildingsManager.resetBuildings(data);
         resetBalance(data);
 
-        Debug.Log("Loaded");
+        //Debug.Log("Loaded");
     }
 
 

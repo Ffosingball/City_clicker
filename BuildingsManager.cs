@@ -433,17 +433,17 @@ public class BuildingsManager : MonoBehaviour
         resetUI();
         recreateBuildings(tempRoadList);
 
-        Debug.Log("Done!");
+        //Debug.Log("Done!");
     }
 
 
     public void recreateBuildings(List<RoadStructure> roadList)
     {
         //Recreate all structures
-        int specialBuildsIndex=0;
+        int specialBuildsIndex=-1;
         foreach(Structure someStruct in allBuildings)
         {
-            Debug.Log("Here");
+            //Debug.Log("Here");
             GameObject newHouse;
             switch(someStruct.getType())
             {
@@ -453,15 +453,15 @@ public class BuildingsManager : MonoBehaviour
                     behaviour1.timeLeft = UnityEngine.Random.Range(0,passiveIncomeManager.periodInSecondsCraft);
                     behaviour1.passiveIncomeManager = passiveIncomeManager;
                     specialBuildsIndex++;
-                    Debug.Log("craft");
+                    //Debug.Log("craft");
                     break;
                 case "House":
                     newHouse = Instantiate(houses[someStruct.getStructNum()], new Vector3(someStruct.getX(),someStruct.getY(),someStruct.getY()+maxHeight), Quaternion.Euler(0f,0f,0f));
-                    Debug.Log("house");
+                    //Debug.Log("house");
                     break;
                 case "BigHouse":
                     newHouse = Instantiate(bigHouses[someStruct.getStructNum()], new Vector3(someStruct.getX(),someStruct.getY(),someStruct.getY()+maxHeight), Quaternion.Euler(0f,0f,0f));
-                    Debug.Log("bighouse");
+                    //Debug.Log("bighouse");
                     break;
                 case "Farm":
                     newHouse = Instantiate(farmingBuildings[someStruct.getStructNum()], new Vector3(someStruct.getX(),someStruct.getY(),someStruct.getY()+maxHeight), Quaternion.Euler(0f,0f,0f));
@@ -469,7 +469,7 @@ public class BuildingsManager : MonoBehaviour
                     behaviour2.timeLeft = UnityEngine.Random.Range(0,passiveIncomeManager.periodInSecondsCraft);
                     behaviour2.passiveIncomeManager = passiveIncomeManager;
                     specialBuildsIndex++;
-                    Debug.Log("farm");
+                    //Debug.Log("farm");
                     break;
                 default:
                     Debug.Log("Unknown building type!");

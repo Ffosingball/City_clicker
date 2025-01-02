@@ -14,6 +14,12 @@ public class ClickButtonBehaviour : MonoBehaviour
     private float timePassed=0;
 
 
+    void Start()
+    {
+        TempObjects.tempObjectsList = new List<GameObject>();
+    }
+
+
     void Update()
     {
         timePassed+= Time.deltaTime;
@@ -27,6 +33,8 @@ public class ClickButtonBehaviour : MonoBehaviour
         }
         else if(timePassed>=interval)
             timePassed=0;
+        
+        TempObjects.tempObjectsList.RemoveAll(item => item == null);
     }
 
 

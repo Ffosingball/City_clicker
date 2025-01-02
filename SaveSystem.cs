@@ -72,4 +72,18 @@ public static class SaveSystem
             return null;
         }
     }
+
+
+    public static void DeleteSave(int saveNum)
+    {
+        string path = Application.persistentDataPath + "/game"+saveNum+".vvg";
+        // Delete the file
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+            Debug.Log("File deleted successfully.");
+        }
+        else
+            Debug.Log("File does not exist.");
+    }
 }

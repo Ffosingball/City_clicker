@@ -18,6 +18,7 @@ public class Structure
         id=lastID;
         lastID++;
         this.type = type;
+        this.structNum = structNum;
         //Debug.Log("id: "+id+"; x: "+x+"; y: "+y);
     }
 

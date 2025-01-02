@@ -56,10 +56,10 @@ public class PassiveIncomeManager : MonoBehaviour
 
     public void resetPassiveIncome(GameData data)
     {
-        farmAmountMultiplier = data.passIncMultiplierFarm;
+        farmMultipleAmount = data.passIncMultiplierFarm;
         periodInSecondsFarm = data.passIncTimeFarm;
         currentAdderFarm = data.passIncAdderFarm;
-        craftAmountMultiplier = data.passIncMultiplierCraft;
+        craftMultipleAmount = data.passIncMultiplierCraft;
         periodInSecondsCraft = data.passIncTimeCraft;
         currentAdderCraft = data.passIncAdderCraft;
     }

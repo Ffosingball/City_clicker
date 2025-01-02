@@ -7,7 +7,7 @@ using System;
 public class UIManager : MonoBehaviour
 {
     public GameObject[] sidePanels;
-    public GameObject mainPanel, hidedPanel, rewritePanel, warningPanel;
+    public GameObject mainPanel, hidedPanel, rewritePanel, warningPanel, deleteWarningPanel;
     private GameObject currentPanel;
     private static Text balanceText;
     public Text balanceTextNonStatic;
@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
     public UpgradeBuildingsManager upgradeBuildingsmanager;
     public PassiveIncomeManager passiveIncomeManager;
     public Button[] loadsBut, saveBut;
-    public Button mainSaveBut, yesSaveBut, noSaveBut, mainLoadBut, yesLoadBut, noLoadBut;
+    public Button mainSaveBut, yesSaveBut, noSaveBut, mainLoadBut, yesLoadBut, noLoadBut, deleteSaveBut, deleteLoadBut;
     public SavesManager savesManager;
     public Text[] saveNloadText;
     [HideInInspector]
@@ -64,9 +64,15 @@ public class UIManager : MonoBehaviour
             }
 
             if(saveChoosed==-1)
+            {
                 mainLoadBut.interactable = false;
+                deleteLoadBut.interactable = false;
+            }
             else
+            {
                 mainLoadBut.interactable = true;
+                deleteLoadBut.interactable = true;
+            }
         }
 
         if (currentPanel == sidePanels[4])
@@ -80,9 +86,15 @@ public class UIManager : MonoBehaviour
             }
 
             if(saveChoosed==-1)
+            {
                 mainSaveBut.interactable = false;
+                deleteSaveBut.interactable = false;
+            }
             else
+            {
                 mainSaveBut.interactable = true;
+                deleteSaveBut.interactable = true;
+            }
         }
     }
 
@@ -296,6 +308,26 @@ public class UIManager : MonoBehaviour
         rewritePanel.SetActive(false);
     }
 
+    public void deleteTheSave()
+    {
+        deleteWarningPanel.SetActive(true);
+    }
+
+    public void yesDeelete()
+    {
+        savesManager.deleteSave(saveChoosed);
+        saveChoosed=-1;
+        deleteWarningPanel.SetActive(false);
+    }
+
+    public void noDelete()
+    {
+        deleteWarningPanel.SetActive(false);
+    }
+
+
+
+
     public static void updateText(float n)
     {
         balanceText.text = Balance.outputCostCorrectly(n);
@@ -305,13 +337,13 @@ public class UIManager : MonoBehaviour
 
     public void craftHouseText(Text text1, Text text2)
     {
-        text1.text = "Every craft house will give income "+passiveIncomeManager.getIncomeCraft()+" every "+passiveIncomeManager.periodInSecondsCraft+" seconds.";
+        text1.text = "Every craft house will give income "+Balance.outputCostCorrectly(passiveIncomeManager.getIncomeCraft())+" every "+Math.Round(passiveIncomeManager.periodInSecondsCraft,1)+" seconds.";
         text2.text = "Craft houses are buildings where artisans make their job!";
     }
 
     public void farmHouseText(Text text1, Text text2)
     {
-        text1.text = "Every farm will give income "+passiveIncomeManager.getIncomeFarm()+" every "+passiveIncomeManager.periodInSecondsFarm+" seconds.";
+        text1.text = "Every farm will give income "+Balance.outputCostCorrectly(passiveIncomeManager.getIncomeFarm())+" every "+Math.Round(passiveIncomeManager.periodInSecondsFarm,1)+" seconds.";
         text2.text = "Farms are buildings where most of the habitats are working!";
     }
 
@@ -320,10 +352,10 @@ public class UIManager : MonoBehaviour
         string finalText="Every house multiply base income by "+((buildingsManager.multiplier-1)*100)+"%.";
 
         if(upgradeBuildingsmanager.incomeIncreased2)
-            finalText = finalText+" Additionally base income for every craft is increased per "+upgradeBuildingsmanager.increaseIncomePerHouseBy+" by every house.";
+            finalText = finalText+" Additionally base income for every craft is increased per "+Balance.outputCostCorrectly(upgradeBuildingsmanager.increaseIncomePerHouseBy)+" by every house.";
         
         if(upgradeBuildingsmanager.costDecreased1)
-            finalText = finalText+" Additionally cost for this type of buildings has been decreased by "+upgradeBuildingsmanager.decreaseCostBy+" times.";
+            finalText = finalText+" Additionally cost for this type of buildings has been decreased by "+Balance.outputCostCorrectly(upgradeBuildingsmanager.decreaseCostBy)+" times.";
         
         text1.text=finalText;
         
@@ -335,7 +367,7 @@ public class UIManager : MonoBehaviour
         string finalText="Every big house increase base income by "+buildingsManager.adderIncrease+".";
 
         if(upgradeBuildingsmanager.incomeIncreased1)
-            finalText = finalText+" Additionally base income for every farm is increased per "+upgradeBuildingsmanager.increaseIncomePerBigHouseBy+" by every big house.";
+            finalText = finalText+" Additionally base income for every farm is increased per "+Balance.outputCostCorrectly(upgradeBuildingsmanager.increaseIncomePerBigHouseBy)+" by every big house.";
         
         if(upgradeBuildingsmanager.costDecreased1)
             finalText = finalText+" Additionally cost for this type of buildings has been decreased by "+upgradeBuildingsmanager.decreaseCostBy+" times.";
@@ -371,13 +403,13 @@ public class UIManager : MonoBehaviour
 
     public void increaseIncome1Text(Text text1, Text text2)
     {
-        text1.text = "Base income for every farm is increased per "+upgradeBuildingsmanager.increaseIncomePerBigHouseBy+" by every big house.";
+        text1.text = "Base income for every farm is increased per "+Balance.outputCostCorrectly(upgradeBuildingsmanager.increaseIncomePerBigHouseBy)+" by every big house.";
         text2.text = "Fighting with unemployment!";
     }
 
     public void increaseIncome2Text(Text text1, Text text2)
     {
-        text1.text = "Base income for every craft is increased per "+upgradeBuildingsmanager.increaseIncomePerHouseBy+" by every house.";
+        text1.text = "Base income for every craft is increased per "+Balance.outputCostCorrectly(upgradeBuildingsmanager.increaseIncomePerHouseBy)+" by every house.";
         text2.text = "Fighting with unemployment!";
     }
 }
