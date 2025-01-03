@@ -70,7 +70,7 @@ public class ClickButtonBehaviour : MonoBehaviour
         while(distanceMoved<textDistanceMove)
         {
             movingTextCur.transform.Translate(new Vector3(0,1,0)*textSpeedMovement*Time.deltaTime);
-            yield return new WaitForSeconds(0.02f); 
+            yield return null; 
             distanceMoved+=1*textSpeedMovement*Time.deltaTime;
         }
         Destroy(movingTextCur);

@@ -62,7 +62,7 @@ public class CraftHouseBehaviour : MonoBehaviour
         while(distanceMoved<passiveIncomeManager.distanceToMove)
         {
             movingTextCur.transform.Translate(new Vector3(0,1,0)*passiveIncomeManager.textSpeedMovement*Time.deltaTime);
-            yield return new WaitForSeconds(0.02f); 
+            yield return null; 
             distanceMoved+=1*passiveIncomeManager.textSpeedMovement*Time.deltaTime;
         }
         Destroy(movingTextCur);
