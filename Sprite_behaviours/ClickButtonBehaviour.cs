@@ -10,6 +10,7 @@ public class ClickButtonBehaviour : MonoBehaviour
     public GameObject movingText, mainButton;
     public int xOffset=0, yOffset=20;
     public float textSpeedMovement=50, textDistanceMove=100, interval=1f;
+    public SavesManager savesManager;
     private int clicks=0;
     private float timePassed=0;
 
@@ -17,11 +18,21 @@ public class ClickButtonBehaviour : MonoBehaviour
     void Start()
     {
         TempObjects.tempObjectsList = new List<GameObject>();
+
+        Balance.updateBalance(Balance.getBalance());
+        Balance.setAdder(0);
+        Balance.setAmountToMultiply(0);
     }
 
 
     void Update()
     {
+        if(TempObjects.loadSave)
+        {
+            savesManager.LoadFrom(TempObjects.saveNum);
+            TempObjects.loadSave=false;
+        }
+
         timePassed+= Time.deltaTime;
        //Debug.Log(Time.deltaTime);
 

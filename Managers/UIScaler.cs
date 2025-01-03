@@ -46,7 +46,8 @@ public class UIScaler : MonoBehaviour
             smallText1.fontSize = (int)(textSize*smallTextSize);
         }
 
-        coinsNum.fontSize = (int)(textSize*coinsTextSize);
+        if(coinsNum!=null)
+            coinsNum.fontSize = (int)(textSize*coinsTextSize);
         //curTextSize=(int)(textSize*coinsTextSize);
     }
 }

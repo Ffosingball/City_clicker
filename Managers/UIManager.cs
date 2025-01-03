@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
     public GameObject[] sidePanels;
-    public GameObject mainPanel, hidedPanel, rewritePanel, warningPanel, deleteWarningPanel;
+    public GameObject mainPanel, hidedPanel, rewritePanel, warningPanel, deleteWarningPanel, exitWarning;
     private GameObject currentPanel;
     private static Text balanceText;
     public Text balanceTextNonStatic;
@@ -323,6 +324,21 @@ public class UIManager : MonoBehaviour
     public void noDelete()
     {
         deleteWarningPanel.SetActive(false);
+    }
+    
+    public void exitTheGame()
+    {
+        exitWarning.SetActive(true);
+    }
+
+    public void yesExit()
+    {
+        SceneManager.LoadScene("main_menu");
+    }
+
+    public void noExit()
+    {
+        exitWarning.SetActive(false);
     }
 
 
