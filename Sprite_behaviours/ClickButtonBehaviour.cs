@@ -11,6 +11,7 @@ public class ClickButtonBehaviour : MonoBehaviour
     public int xOffset=0, yOffset=20;
     public float textSpeedMovement=50, textDistanceMove=100, interval=1f;
     public SavesManager savesManager;
+    public SoundManager soundManager;
     private int clicks=0;
     private float timePassed=0;
 
@@ -52,6 +53,9 @@ public class ClickButtonBehaviour : MonoBehaviour
     public void increaseBalance()
     {
         float increasedBy = Balance.updateBalance();
+
+        if(SettingsInfo.playMusicForMainButton)
+            soundManager.PlayMainButtonClickSound();
 
         RectTransform rectTransform = mainButton.GetComponent<RectTransform>();
         Vector3 worldCenter = rectTransform.TransformPoint(rectTransform.rect.center);

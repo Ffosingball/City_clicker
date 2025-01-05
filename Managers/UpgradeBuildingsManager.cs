@@ -14,6 +14,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
     public int craftUpgrades=0, farmUpgrades=0;
     [HideInInspector]
     public bool incomeIncreased1=false, incomeIncreased2=false, costDecreased1=false, costDecreased2=false;
+    public SoundManager soundManager;
 
 
     private void Start()
@@ -58,6 +59,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
 
     public void upgradeCraft()
     {
+        soundManager.PlayUpgradeSound();
         Balance.updateBalance(craftUpgradeCost);
         craftUpgradeCost*=costMultiplier;
         craftUpgradeCostText.text="\n"+Balance.outputCostCorrectly(craftUpgradeCost);
@@ -74,6 +76,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
 
     public void upgradeFarm()
     {
+        soundManager.PlayUpgradeSound();
         Balance.updateBalance(farmUpgradeCost);
         farmUpgradeCost*=costMultiplier;
         farmUpgradeCostText.text="\n"+Balance.outputCostCorrectly(farmUpgradeCost);
@@ -90,6 +93,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
 
     public void increseIncomeFromBuildings1()
     {
+        soundManager.PlayUpgradeSound();
         Balance.updateBalance(upgradeIncomeFromBuild1Cost);
         passiveIncomeManager.increaseCostByBigHouses = true;
         passiveIncomeManager.increaseIncomePerBigHouse(buildingsManager.numOfBigHouses);
@@ -100,6 +104,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
 
     public void increseIncomeFromBuildings2()
     {
+        soundManager.PlayUpgradeSound();
         Balance.updateBalance(upgradeIncomeFromBuild2Cost);
         passiveIncomeManager.increaseCostByHouses = true;
         passiveIncomeManager.increaseIncomePerHouse(buildingsManager.numOfHouses);
@@ -110,6 +115,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
 
     public void decreaseCostBy1()
     {
+        soundManager.PlayUpgradeSound();
         Balance.updateBalance(decreaseCost1);
         buildingsManager.decreseCostBigHouse(decreaseCostBy);
         costDecreased1=true;
@@ -119,6 +125,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
 
     public void decreaseCostBy2()
     {
+        soundManager.PlayUpgradeSound();
         Balance.updateBalance(decreaseCost2);
         buildingsManager.decreseCostHouse(decreaseCostBy);
         costDecreased2=true;

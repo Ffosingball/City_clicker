@@ -86,4 +86,37 @@ public static class SaveSystem
         else
             Debug.Log("File does not exist.");
     }
+
+
+
+    public static void SaveSettings()
+    {
+        SettingsInfoKeeper info = SettingsInfo.getAllInfo();
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/settings.vvg";
+        FileStream stream = new FileStream(path, FileMode.Create);
+        formatter.Serialize(stream, info);
+        stream.Close();
+    }
+
+
+    public static SettingsInfoKeeper LoadSettings()
+    {
+        string path = Application.persistentDataPath + "/settings.vvg";
+        if(File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+            //Read data from the file
+            SettingsInfoKeeper info = formatter.Deserialize(stream) as SettingsInfoKeeper;
+            stream.Close();
+            return info;
+        }
+        else
+        {
+            Debug.Log("File does not exist "+path);
+            return null;
+        }
+    }
 }

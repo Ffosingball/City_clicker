@@ -28,6 +28,7 @@ public class BuildingsManager : MonoBehaviour
     public GameObject[] craftBuildings;
     public GameObject[] farmingBuildings;
     public PassiveIncomeManager passiveIncomeManager;
+    public SoundManager soundManager;
 
     private void Start()
     {
@@ -70,6 +71,7 @@ public class BuildingsManager : MonoBehaviour
 
     public void buyHouse()
     {
+        soundManager.PlayPurchaseSound();
         Balance.updateBalance(houseCost);
         Balance.updateMultiplier();
         houseCost*=costMultiplier;
@@ -83,6 +85,7 @@ public class BuildingsManager : MonoBehaviour
 
     public void buyBigHouse()
     {
+        soundManager.PlayPurchaseSound();
         Balance.updateBalance(bigHouseCost);
         Balance.updateAdder(adderIncrease);
         bigHouseCost*=costMultiplier;
@@ -96,6 +99,7 @@ public class BuildingsManager : MonoBehaviour
 
     public void buyCraftHouse()
     {
+        soundManager.PlayPurchaseSound();
         Balance.updateBalance(craftCost);
         craftCost*=costMultiplier;
         craftText.text="\n"+Balance.outputCostCorrectly(craftCost);
@@ -105,11 +109,13 @@ public class BuildingsManager : MonoBehaviour
         GameObject newCraft = createStructure(craftBuildings, "CraftHouse", true);
         CraftHouseBehaviour newBehaviour = newCraft.GetComponent<CraftHouseBehaviour>();
         newBehaviour.passiveIncomeManager = passiveIncomeManager;
+        newBehaviour.soundManager = soundManager;
     }
 
 
     public void buyFarm()
     {
+        soundManager.PlayPurchaseSound();
         Balance.updateBalance(farmCost);
         farmCost*=costMultiplier;
         farmText.text="\n"+Balance.outputCostCorrectly(farmCost);
@@ -119,6 +125,7 @@ public class BuildingsManager : MonoBehaviour
         GameObject newFarm = createStructure(farmingBuildings, "Farm", false);
         FarmBehaviour newBehaviour = newFarm.GetComponent<FarmBehaviour>();
         newBehaviour.passiveIncomeManager = passiveIncomeManager;
+        newBehaviour.soundManager = soundManager;
     }
 
 
@@ -452,6 +459,7 @@ public class BuildingsManager : MonoBehaviour
                     CraftHouseBehaviour behaviour1 = newHouse.GetComponent<CraftHouseBehaviour>();
                     behaviour1.timeLeft = UnityEngine.Random.Range(0,passiveIncomeManager.periodInSecondsCraft);
                     behaviour1.passiveIncomeManager = passiveIncomeManager;
+                    behaviour1.soundManager = soundManager;
                     specialBuildsIndex++;
                     //Debug.Log("craft");
                     break;
@@ -468,6 +476,7 @@ public class BuildingsManager : MonoBehaviour
                     FarmBehaviour behaviour2 = newHouse.GetComponent<FarmBehaviour>();
                     behaviour2.timeLeft = UnityEngine.Random.Range(0,passiveIncomeManager.periodInSecondsCraft);
                     behaviour2.passiveIncomeManager = passiveIncomeManager;
+                    behaviour2.soundManager = soundManager;
                     specialBuildsIndex++;
                     //Debug.Log("farm");
                     break;

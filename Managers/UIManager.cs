@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public BuildingsManager buildingsManager;
     public UpgradeBuildingsManager upgradeBuildingsmanager;
     public PassiveIncomeManager passiveIncomeManager;
+    public SoundManager soundManager;
     public Button[] loadsBut, saveBut;
     public Button mainSaveBut, yesSaveBut, noSaveBut, mainLoadBut, yesLoadBut, noLoadBut, deleteSaveBut, deleteLoadBut;
     public SavesManager savesManager;
@@ -105,6 +106,7 @@ public class UIManager : MonoBehaviour
         currentPanel.SetActive(false);
         sidePanels[0].SetActive(true);
         currentPanel=sidePanels[0];
+        soundManager.PlayClickSound();
     }
 
     public void buildingButton()
@@ -112,6 +114,7 @@ public class UIManager : MonoBehaviour
         currentPanel.SetActive(false);
         sidePanels[1].SetActive(true);
         currentPanel=sidePanels[1];
+        soundManager.PlayClickSound();
     }
 
     public void upgradeButton()
@@ -119,6 +122,7 @@ public class UIManager : MonoBehaviour
         currentPanel.SetActive(false);
         sidePanels[2].SetActive(true);
         currentPanel=sidePanels[2];
+        soundManager.PlayClickSound();
     }
 
     public void eraButton()
@@ -126,6 +130,7 @@ public class UIManager : MonoBehaviour
         currentPanel.SetActive(false);
         sidePanels[3].SetActive(true);
         currentPanel=sidePanels[3];
+        soundManager.PlayClickSound();
     }
 
     public void saveButton()
@@ -134,6 +139,7 @@ public class UIManager : MonoBehaviour
         sidePanels[4].SetActive(true);
         currentPanel=sidePanels[4];
         saveChoosed=-1;
+        soundManager.PlayClickSound();
     }
 
     public void loadButton()
@@ -142,6 +148,7 @@ public class UIManager : MonoBehaviour
         sidePanels[5].SetActive(true);
         currentPanel=sidePanels[5];
         saveChoosed=-1;
+        soundManager.PlayClickSound();
     }
 
     public void hideUIButton()
@@ -149,6 +156,7 @@ public class UIManager : MonoBehaviour
         currentPanel.SetActive(false);
         mainPanel.SetActive(false);
         hidedPanel.SetActive(true);
+        soundManager.PlayClickSound();
     }
 
     public void showUIButton()
@@ -156,6 +164,7 @@ public class UIManager : MonoBehaviour
         hidedPanel.SetActive(false);
         currentPanel.SetActive(true);
         mainPanel.SetActive(true);
+        soundManager.PlayClickSound();
     }
 
     public void save1Button()
@@ -163,6 +172,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=0;
         ResetButtonColorSave();
         ModifyOutline(saveBut[0]);
+        soundManager.PlayChoiceSound();
     }
 
     public void save2Button()
@@ -170,6 +180,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=1;
         ResetButtonColorSave();
         ModifyOutline(saveBut[1]);
+        soundManager.PlayChoiceSound();
     }
 
     public void save3Button()
@@ -177,6 +188,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=2;
         ResetButtonColorSave();
         ModifyOutline(saveBut[2]);
+        soundManager.PlayChoiceSound();
     }
 
     public void save4Button()
@@ -184,6 +196,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=3;
         ResetButtonColorSave();
         ModifyOutline(saveBut[3]);
+        soundManager.PlayChoiceSound();
     }
 
     public void save5Button()
@@ -191,6 +204,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=4;
         ResetButtonColorSave();
         ModifyOutline(saveBut[4]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load1Button()
@@ -198,6 +212,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=0;
         ResetButtonColorLoad();
         ModifyOutline(loadsBut[0]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load2Button()
@@ -205,6 +220,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=1;
         ResetButtonColorLoad();
         ModifyOutline(loadsBut[1]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load3Button()
@@ -212,6 +228,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=2;
         ResetButtonColorLoad();
         ModifyOutline(loadsBut[2]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load4Button()
@@ -219,6 +236,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=3;
         ResetButtonColorLoad();
         ModifyOutline(loadsBut[3]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load5Button()
@@ -226,6 +244,7 @@ public class UIManager : MonoBehaviour
         saveChoosed=4;
         ResetButtonColorLoad();
         ModifyOutline(loadsBut[4]);
+        soundManager.PlayChoiceSound();
     }
 
 
@@ -236,6 +255,7 @@ public class UIManager : MonoBehaviour
         currentPanel=sidePanels[0];
         ResetButtonColorLoad();
         ResetButtonColorSave();
+        soundManager.PlayClickSound();
     }
 
 
@@ -272,10 +292,12 @@ public class UIManager : MonoBehaviour
     public void chooseThisSaveToLoad()
     {
         warningPanel.SetActive(true);
+        soundManager.PlayClickSound();
     }
 
     public void yesLoad()
     {
+        soundManager.PlayClickSound();
         savesManager.LoadFrom(saveChoosed);
         saveChoosed=-1;
         warningPanel.SetActive(false);
@@ -284,10 +306,12 @@ public class UIManager : MonoBehaviour
     public void noLoad()
     {
         warningPanel.SetActive(false);
+        soundManager.PlayClickSound();
     }
 
     public void chooseThisSaveSave()
     {
+        soundManager.PlayClickSound();
         if(savesManager.checkSaves(saveChoosed))
             rewritePanel.SetActive(true);
         else
@@ -299,6 +323,7 @@ public class UIManager : MonoBehaviour
 
     public void yesSave()
     {
+        soundManager.PlayClickSound();
         savesManager.SaveTo(saveChoosed);
         saveChoosed=-1;
         rewritePanel.SetActive(false);
@@ -307,15 +332,18 @@ public class UIManager : MonoBehaviour
     public void noSave()
     {
         rewritePanel.SetActive(false);
+        soundManager.PlayClickSound();
     }
 
     public void deleteTheSave()
     {
         deleteWarningPanel.SetActive(true);
+        soundManager.PlayClickSound();
     }
 
     public void yesDeelete()
     {
+        soundManager.PlayClickSound();
         savesManager.deleteSave(saveChoosed);
         saveChoosed=-1;
         deleteWarningPanel.SetActive(false);
@@ -324,21 +352,25 @@ public class UIManager : MonoBehaviour
     public void noDelete()
     {
         deleteWarningPanel.SetActive(false);
+        soundManager.PlayClickSound();
     }
     
     public void exitTheGame()
     {
         exitWarning.SetActive(true);
+        soundManager.PlayClickSound();
     }
 
     public void yesExit()
     {
+        soundManager.PlayClickSound();
         SceneManager.LoadScene("main_menu");
     }
 
     public void noExit()
     {
         exitWarning.SetActive(false);
+        soundManager.PlayClickSound();
     }
 
 

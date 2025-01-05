@@ -12,6 +12,7 @@ public class ButtonClickInfo : MonoBehaviour
     public bool showAbove=true;
     public int numOfTextToShow=-1;
     public UIManager uIManager;
+    public SoundManager soundManager;
     private Text importantText=null, otherText=null;
     private bool isShown=false;
 
@@ -32,6 +33,8 @@ public class ButtonClickInfo : MonoBehaviour
 
     public void showInfo()
     {
+        soundManager.PlayClickSound();
+
         if(isShown==false)
         {
             Vector3 mousePosition = Input.mousePosition;

@@ -11,12 +11,15 @@ public class MainMenuManager : MonoBehaviour
     public Text[] saveNloadText;
     public Button mainLoadBut;
     public SavesManager savesManager;
+    public SoundManager soundManager;
     private int saveChoosed;
 
 
     private void Start()
     {
         ResetButtonColor();
+
+        savesManager.LoadSettings();
     }
 
 
@@ -49,12 +52,14 @@ public class MainMenuManager : MonoBehaviour
 
     public void startGame()
     {
+        soundManager.PlayClickSound();
         TempObjects.loadSave = false;
         SceneManager.LoadScene("main_screen");
     }
 
     public void loadGame()
     {
+        soundManager.PlayClickSound();
         TempObjects.saveNum = saveChoosed;
         TempObjects.loadSave = true;
         SceneManager.LoadScene("main_screen");
@@ -65,16 +70,19 @@ public class MainMenuManager : MonoBehaviour
         saveChoosed=-1;
         ResetButtonColor();
         savePanel.SetActive(true);
+        soundManager.PlayClickSound();
     }
 
     public void closeSaveScreen()
     {
         saveChoosed=-1;
         savePanel.SetActive(false);
+        soundManager.PlayClickSound();
     }
 
     public void exitGame()
     {
+        soundManager.PlayClickSound();
         Debug.Log("Игра закрыта");
         Application.Quit();
     }
@@ -86,6 +94,7 @@ public class MainMenuManager : MonoBehaviour
         saveChoosed=0;
         ResetButtonColor();
         ModifyOutline(saveBut[0]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load2Button()
@@ -93,6 +102,7 @@ public class MainMenuManager : MonoBehaviour
         saveChoosed=1;
         ResetButtonColor();
         ModifyOutline(saveBut[1]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load3Button()
@@ -100,6 +110,7 @@ public class MainMenuManager : MonoBehaviour
         saveChoosed=2;
         ResetButtonColor();
         ModifyOutline(saveBut[2]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load4Button()
@@ -107,6 +118,7 @@ public class MainMenuManager : MonoBehaviour
         saveChoosed=3;
         ResetButtonColor();
         ModifyOutline(saveBut[3]);
+        soundManager.PlayChoiceSound();
     }
 
     public void load5Button()
@@ -114,6 +126,7 @@ public class MainMenuManager : MonoBehaviour
         saveChoosed=4;
         ResetButtonColor();
         ModifyOutline(saveBut[4]);
+        soundManager.PlayChoiceSound();
     }
 
 

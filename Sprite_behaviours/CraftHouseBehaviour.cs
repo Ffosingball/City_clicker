@@ -10,6 +10,7 @@ public class CraftHouseBehaviour : MonoBehaviour
     public float timeLeft=-1;
     private Vector3 coords;
     public PassiveIncomeManager passiveIncomeManager;
+    public SoundManager soundManager;
 
     void Start()
     {
@@ -36,6 +37,10 @@ public class CraftHouseBehaviour : MonoBehaviour
 
             yield return new WaitForSeconds(0.1f);
             Balance.increaseBalance(passiveIncomeManager.getIncomeCraft());
+
+            if(SettingsInfo.playForIncome)
+                soundManager.PlayIncomeSound();
+
             createText();
         }
     }

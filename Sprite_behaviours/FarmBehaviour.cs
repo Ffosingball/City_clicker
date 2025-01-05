@@ -10,6 +10,7 @@ public class FarmBehaviour : MonoBehaviour
     public float timeLeft=-1;
     private Vector3 coords;
     public PassiveIncomeManager passiveIncomeManager;
+    public SoundManager soundManager;
 
     void Start()
     {
@@ -34,6 +35,10 @@ public class FarmBehaviour : MonoBehaviour
 
             yield return new WaitForSeconds(0.1f);
             Balance.increaseBalance(passiveIncomeManager.getIncomeFarm());
+
+            if(SettingsInfo.playForIncome)
+                soundManager.PlayIncomeSound();
+                
             createText();
         }
     }

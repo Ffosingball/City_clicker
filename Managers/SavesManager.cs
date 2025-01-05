@@ -107,4 +107,30 @@ public class SavesManager : MonoBehaviour
         Balance.setAdder(data.adder);
         Balance.setAmountToMultiply(data.multiplierExponent);
     }
+
+
+    public void LoadSettings()
+    {
+        SettingsInfoKeeper info = SaveSystem.LoadSettings();
+        if (info == null)
+        {
+            SettingsInfo.playMusicForMainButton = false;
+            SettingsInfo.playForIncome = false;
+            SettingsInfo.musicVolume = 1f;
+            SettingsInfo.soundEffectsVolume = 1f;
+        }
+        else
+        {
+            SettingsInfo.playMusicForMainButton = info.playMusicForMainButton;
+            SettingsInfo.playForIncome = info.playForIncome;
+            SettingsInfo.musicVolume = info.musicVolume;
+            SettingsInfo.soundEffectsVolume = info.soundEffectsVolume;
+        }
+    }
+
+
+    public void SaveSettings()
+    {
+        SaveSystem.SaveSettings();
+    }
 }
