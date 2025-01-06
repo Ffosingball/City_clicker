@@ -5,9 +5,10 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     //Reference to the listener
-    public AudioSource audioSource;
+    public AudioSource musicSource, soundSource;
     //Reference to sound
-    public AudioClip background1, background2, background3, background4, upgrade, mainButtonClick, choice, otherButtonClick, purchase, income;
+    public AudioClip background1, background2, background3, background4, upgrade, mainButtonClick, choice, otherButtonClick, purchase, income, changeValue;
+    private Coroutine changeValueSoundPlaying=null;
 
 
     //It starts play background music
@@ -48,8 +49,8 @@ public class SoundManager : MonoBehaviour
     //This method strart play a music
     private void PlayMusic(AudioClip soundClip)
     {
-        audioSource.clip = soundClip;
-        audioSource.Play();
+        musicSource.clip = soundClip;
+        musicSource.Play();
         Debug.Log("Playing music");
     }
 
@@ -57,44 +58,73 @@ public class SoundManager : MonoBehaviour
     //This method start play short sounds
     public void PlayUpgradeSound()
     {
-        audioSource.PlayOneShot(upgrade);
+        soundSource.PlayOneShot(upgrade);
     }
 
 
     public void PlayMainButtonClickSound()
     {
-        audioSource.PlayOneShot(mainButtonClick);
+        soundSource.PlayOneShot(mainButtonClick);
     }
 
 
     public void PlayChoiceSound()
     {
-        audioSource.PlayOneShot(choice);
+        soundSource.PlayOneShot(choice);
     }
 
 
     public void PlayClickSound()
     {
-        audioSource.PlayOneShot(otherButtonClick);
+        soundSource.PlayOneShot(otherButtonClick);
     }
 
 
     public void PlayPurchaseSound()
     {
-        audioSource.PlayOneShot(purchase);
+        soundSource.PlayOneShot(purchase);
     }
 
 
     public void PlayIncomeSound()
     {
-        audioSource.PlayOneShot(income);
+        soundSource.PlayOneShot(income);
+    }
+
+
+    public void PlayChangeValueSound()
+    {
+        if(changeValueSoundPlaying==null)
+            changeValueSoundPlaying = StartCoroutine(ChangeValueSoundCourutine());
+    }
+
+    private IEnumerator ChangeValueSoundCourutine()
+    {
+        soundSource.PlayOneShot(changeValue);
+        yield return new WaitForSeconds(1f); 
+        changeValueSoundPlaying = null;
     }
 
 
     //This method stops all music
     public void StopSound()
     {
-        if (audioSource.isPlaying)
-            audioSource.Stop();
+        if (soundSource.isPlaying)
+            soundSource.Stop();
+        
+        if(musicSource.isPlaying)
+            musicSource.Stop();
+    }
+
+
+    public void updateMusciVolume(float volume)
+    {
+        musicSource.volume = volume;
+    }
+
+
+    public void updateSoundVolume(float volume)
+    {
+        soundSource.volume = volume;
     }
 }

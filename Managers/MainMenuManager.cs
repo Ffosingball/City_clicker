@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -18,8 +19,6 @@ public class MainMenuManager : MonoBehaviour
     private void Start()
     {
         ResetButtonColor();
-
-        savesManager.LoadSettings();
     }
 
 

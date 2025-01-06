@@ -11,6 +11,7 @@ public static class SettingsInfo
 
     public static SettingsInfoKeeper getAllInfo()
     {
+        Debug.Log("Get Info");
         SettingsInfoKeeper info = new SettingsInfoKeeper();
         info.playMusicForMainButton = playMusicForMainButton;
         info.playForIncome = playForIncome;
@@ -18,5 +19,14 @@ public static class SettingsInfo
         info.soundEffectsVolume = soundEffectsVolume;
 
         return info;
+    }
+
+    public static void setNewSettings(SettingsInfoKeeper info)
+    {
+        Debug.Log("New Info");
+        playMusicForMainButton = info.playMusicForMainButton;
+        playForIncome = info.playForIncome;
+        musicVolume = info.musicVolume;
+        soundEffectsVolume = info.soundEffectsVolume;
     }
 }

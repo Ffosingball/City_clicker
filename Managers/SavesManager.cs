@@ -121,10 +121,7 @@ public class SavesManager : MonoBehaviour
         }
         else
         {
-            SettingsInfo.playMusicForMainButton = info.playMusicForMainButton;
-            SettingsInfo.playForIncome = info.playForIncome;
-            SettingsInfo.musicVolume = info.musicVolume;
-            SettingsInfo.soundEffectsVolume = info.soundEffectsVolume;
+            SettingsInfo.setNewSettings(info);
         }
     }
 
