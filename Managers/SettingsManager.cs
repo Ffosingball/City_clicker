@@ -167,6 +167,7 @@ public class SettingsManager : MonoBehaviour
 
     public void saveSettingsNow()
     {
+        soundManager.PlayClickSound();
         savesManager.SaveSettings();
         settingsChanged=false;
         infoBeforeChange = SettingsInfo.getAllInfo();

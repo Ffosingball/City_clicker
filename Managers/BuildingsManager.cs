@@ -212,6 +212,8 @@ public class BuildingsManager : MonoBehaviour
             }
         }
 
+        DestroyNatureAt(new Vector3Int(x,y,y+maxHeight));
+
         return newHouse;
     }
 
@@ -500,5 +502,19 @@ public class BuildingsManager : MonoBehaviour
             allStructures.Add(newPart);
         }
 
+    }
+
+
+    private void DestroyNatureAt(Vector3Int position)
+    {
+        //This code create box 1 by 1 by 1 at specific position and check if any GameObject
+        //with specific layer inside this box
+        RaycastHit[] hits = Physics.BoxCastAll((Vector3)position + new Vector3(0,0.5f,0),new Vector3(20f,20f,20f),transform.up,Quaternion.identity,1f,1<<LayerMask.NameToLayer("Nature"));
+        
+        //Destroy all founded nature
+        foreach(var item in hits)
+        {
+            Destroy(item.collider.gameObject);
+        }
     }
 }

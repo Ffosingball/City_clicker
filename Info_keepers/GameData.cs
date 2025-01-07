@@ -6,7 +6,7 @@ using System;
 [System.Serializable]
 public class GameData
 {
-    public List<Structure> usualBuildingsList;
+    public List<Structure> usualBuildingsList, natureObjects;
     public List<RoadStructure> roadList;
     public List<PassiveIncomeStructure> specialBildingsList;
     public float balance, adder, multiplierExponent, houseCost, bigHouseCost, farmCost, craftCost;
@@ -64,5 +64,11 @@ public class GameData
         this.decreasedCost2=decreasedCost2;
         this.farmUpgradeCost = farmUpgradeCost;
         this.craftUpgradeCost = craftUpgradeCost;
+    }
+
+
+    public void setNatureObjectsInfo(List<Structure> natureObjects)
+    {
+        this.natureObjects=natureObjects;
     }
 }

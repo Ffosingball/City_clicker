@@ -8,6 +8,7 @@ public class SavesManager : MonoBehaviour
     public BuildingsManager buildingsManager;
     public UpgradeBuildingsManager upgradeBuildingsManager;
     public PassiveIncomeManager passiveIncomeManager;
+    public MapGenerator mapGenerator;
     private string[] saveNames;
 
 
@@ -73,6 +74,7 @@ public class SavesManager : MonoBehaviour
         data.setBuildingsInfo(buildingsManager.houseCost,buildingsManager.bigHouseCost,buildingsManager.farmCost,buildingsManager.craftCost,upgradeBuildingsManager.farmUpgrades,upgradeBuildingsManager.craftUpgrades,buildingsManager.numOfBigHouses,buildingsManager.numOfHouses,buildingsManager.numOfFarms,buildingsManager.numOfCraft);
         data.setUpgradeInfo(upgradeBuildingsManager.incomeIncreased1,upgradeBuildingsManager.incomeIncreased2,upgradeBuildingsManager.costDecreased1,upgradeBuildingsManager.costDecreased2,upgradeBuildingsManager.farmUpgradeCost,upgradeBuildingsManager.craftUpgradeCost);
         data.setPassiveIncomeInfo(passiveIncomeManager.currentAdderFarm,passiveIncomeManager.farmMultipleAmount,passiveIncomeManager.periodInSecondsFarm,passiveIncomeManager.currentAdderCraft,passiveIncomeManager.craftMultipleAmount,passiveIncomeManager.periodInSecondsCraft);
+        data.setNatureObjectsInfo(mapGenerator.allNatureStructures);
     
         SaveSystem.SaveGame(saveNumber, data);
         SaveSystem.SaveNames(saveNames);
@@ -94,6 +96,7 @@ public class SavesManager : MonoBehaviour
         passiveIncomeManager.resetPassiveIncome(data);
         upgradeBuildingsManager.resetUpgrades(data);
         buildingsManager.resetBuildings(data);
+        mapGenerator.resetNature(data);
         resetBalance(data);
 
         //Debug.Log("Loaded");
