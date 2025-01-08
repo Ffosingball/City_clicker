@@ -8,4 +8,5 @@ public class SettingsInfoKeeper
 {
     public bool playMusicForMainButton, playForIncome;
     public float musicVolume, soundEffectsVolume;
+    public int bigTextSize, middleTextSize, smallTextSize;
 }

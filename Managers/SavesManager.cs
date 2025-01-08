@@ -120,10 +120,7 @@ public class SavesManager : MonoBehaviour
         SettingsInfoKeeper info = SaveSystem.LoadSettings();
         if (info == null)
         {
-            SettingsInfo.playMusicForMainButton = false;
-            SettingsInfo.playForIncome = false;
-            SettingsInfo.musicVolume = 1f;
-            SettingsInfo.soundEffectsVolume = 1f;
+            SettingsInfo.basicSettings();
         }
         else
         {

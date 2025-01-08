@@ -76,7 +76,7 @@ public class BuildingsManager : MonoBehaviour
         Balance.updateBalance(houseCost);
         Balance.updateMultiplier();
         houseCost*=costMultiplier;
-        houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
+        houseText.text=""+Balance.outputCostCorrectly(houseCost);
         numOfHouses++;
         numOfHousesText.text="X"+numOfHouses;
         createStructure(houses, "House", true);
@@ -90,7 +90,7 @@ public class BuildingsManager : MonoBehaviour
         Balance.updateBalance(bigHouseCost);
         Balance.updateAdder(adderIncrease);
         bigHouseCost*=costMultiplier;
-        bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
+        bigHouseText.text=""+Balance.outputCostCorrectly(bigHouseCost);
         numOfBigHouses++;
         numOfBigHousesText.text="X"+numOfBigHouses;
         createStructure(bigHouses, "BigHouse", true);
@@ -103,7 +103,7 @@ public class BuildingsManager : MonoBehaviour
         soundManager.PlayPurchaseSound();
         Balance.updateBalance(craftCost);
         craftCost*=costMultiplier;
-        craftText.text="\n"+Balance.outputCostCorrectly(craftCost);
+        craftText.text=""+Balance.outputCostCorrectly(craftCost);
         numOfCraft++;
         numOfCraftHousesText.text="X"+numOfCraft;
 
@@ -119,7 +119,7 @@ public class BuildingsManager : MonoBehaviour
         soundManager.PlayPurchaseSound();
         Balance.updateBalance(farmCost);
         farmCost*=costMultiplier;
-        farmText.text="\n"+Balance.outputCostCorrectly(farmCost);
+        farmText.text=""+Balance.outputCostCorrectly(farmCost);
         numOfFarms++;
         numOfFarmsText.text="X"+numOfFarms;
 
@@ -133,14 +133,14 @@ public class BuildingsManager : MonoBehaviour
     public void decreseCostBigHouse(float decreaseBy)
     {
         bigHouseCost/=decreaseBy;
-        bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
+        bigHouseText.text=""+Balance.outputCostCorrectly(bigHouseCost);
     }
 
 
     public void decreseCostHouse(float decreaseBy)
     {
         houseCost/=decreaseBy;
-        houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
+        houseText.text=""+Balance.outputCostCorrectly(houseCost);
     }
 
 
@@ -367,10 +367,10 @@ public class BuildingsManager : MonoBehaviour
 
     public void resetUI()
     {
-        houseText.text="\n"+Balance.outputCostCorrectly(houseCost);
-        bigHouseText.text="\n"+Balance.outputCostCorrectly(bigHouseCost);
-        craftText.text="\n"+Balance.outputCostCorrectly(craftCost);
-        farmText.text="\n"+Balance.outputCostCorrectly(farmCost);
+        houseText.text=""+Balance.outputCostCorrectly(houseCost);
+        bigHouseText.text=""+Balance.outputCostCorrectly(bigHouseCost);
+        craftText.text=""+Balance.outputCostCorrectly(craftCost);
+        farmText.text=""+Balance.outputCostCorrectly(farmCost);
 
         if(numOfHouses==0)
             numOfHousesText.text="";

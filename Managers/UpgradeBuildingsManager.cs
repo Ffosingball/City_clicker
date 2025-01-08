@@ -62,7 +62,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
         soundManager.PlayUpgradeSound();
         Balance.updateBalance(craftUpgradeCost);
         craftUpgradeCost*=costMultiplier;
-        craftUpgradeCostText.text="\n"+Balance.outputCostCorrectly(craftUpgradeCost);
+        craftUpgradeCostText.text=""+Balance.outputCostCorrectly(craftUpgradeCost);
 
         if(craftUpgrades%2==1 && passiveIncomeManager.periodInSecondsCraft>passiveIncomeManager.minPeriodLimitCraft)
             passiveIncomeManager.periodInSecondsCraft*=(1-passiveIncomeManager.craftTimeDecrease);
@@ -79,7 +79,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
         soundManager.PlayUpgradeSound();
         Balance.updateBalance(farmUpgradeCost);
         farmUpgradeCost*=costMultiplier;
-        farmUpgradeCostText.text="\n"+Balance.outputCostCorrectly(farmUpgradeCost);
+        farmUpgradeCostText.text=""+Balance.outputCostCorrectly(farmUpgradeCost);
 
         if(farmUpgrades%2==1 && passiveIncomeManager.periodInSecondsFarm>passiveIncomeManager.minPeriodLimitFarm)
             passiveIncomeManager.periodInSecondsFarm*=(1-passiveIncomeManager.farmTimeDecrease);
@@ -98,7 +98,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
         passiveIncomeManager.increaseCostByBigHouses = true;
         passiveIncomeManager.increaseIncomePerBigHouse(buildingsManager.numOfBigHouses);
         incomeIncreased1=true;
-        upgradeIncomeText1.text = "\n Done!";
+        upgradeIncomeText1.text = "Done!";
     }
 
 
@@ -109,7 +109,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
         passiveIncomeManager.increaseCostByHouses = true;
         passiveIncomeManager.increaseIncomePerHouse(buildingsManager.numOfHouses);
         incomeIncreased2=true;
-        upgradeIncomeText2.text = "\n Done!";
+        upgradeIncomeText2.text = "Done!";
     }
 
 
@@ -119,7 +119,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
         Balance.updateBalance(decreaseCost1);
         buildingsManager.decreseCostBigHouse(decreaseCostBy);
         costDecreased1=true;
-        decreaseCostText1.text = "\n Done!";
+        decreaseCostText1.text = "Done!";
     }
 
 
@@ -129,34 +129,34 @@ public class UpgradeBuildingsManager : MonoBehaviour
         Balance.updateBalance(decreaseCost2);
         buildingsManager.decreseCostHouse(decreaseCostBy);
         costDecreased2=true;
-        decreaseCostText2.text = "\n Done!";
+        decreaseCostText2.text = "Done!";
     }
 
 
     public void resetUI()
     {
-        craftUpgradeCostText.text="\n"+Balance.outputCostCorrectly(craftUpgradeCost);
-        farmUpgradeCostText.text="\n"+Balance.outputCostCorrectly(farmUpgradeCost);
+        craftUpgradeCostText.text=""+Balance.outputCostCorrectly(craftUpgradeCost);
+        farmUpgradeCostText.text=""+Balance.outputCostCorrectly(farmUpgradeCost);
 
         if(incomeIncreased1)
-            upgradeIncomeText1.text = "\n Done!";
+            upgradeIncomeText1.text = "Done!";
         else
-            upgradeIncomeText1.text = "\n"+Balance.outputCostCorrectly(upgradeIncomeFromBuild1Cost);
+            upgradeIncomeText1.text = ""+Balance.outputCostCorrectly(upgradeIncomeFromBuild1Cost);
         
         if(incomeIncreased2)
-            upgradeIncomeText2.text = "\n Done!";
+            upgradeIncomeText2.text = "Done!";
         else
-            upgradeIncomeText2.text = "\n"+Balance.outputCostCorrectly(upgradeIncomeFromBuild2Cost);
+            upgradeIncomeText2.text = ""+Balance.outputCostCorrectly(upgradeIncomeFromBuild2Cost);
         
         if(costDecreased1)
-            decreaseCostText1.text = "\n Done!";
+            decreaseCostText1.text = "Done!";
         else
-            decreaseCostText1.text = "\n"+Balance.outputCostCorrectly(decreaseCost1);
+            decreaseCostText1.text = ""+Balance.outputCostCorrectly(decreaseCost1);
         
         if(costDecreased2)
-            decreaseCostText2.text = "\n Done!";
+            decreaseCostText2.text = "Done!";
         else
-            decreaseCostText2.text = "\n"+Balance.outputCostCorrectly(decreaseCost2);
+            decreaseCostText2.text = ""+Balance.outputCostCorrectly(decreaseCost2);
 
         craftLevelText.text="Lv. "+craftUpgrades;
         farmLevelText.text="Lv. "+farmUpgrades;

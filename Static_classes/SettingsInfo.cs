@@ -8,6 +8,7 @@ public static class SettingsInfo
 {
     public static bool playMusicForMainButton, playForIncome;
     public static float musicVolume, soundEffectsVolume;
+    public static int bigTextSize, middleTextSize, smallTextSize;
 
     public static SettingsInfoKeeper getAllInfo()
     {
@@ -17,6 +18,9 @@ public static class SettingsInfo
         info.playForIncome = playForIncome;
         info.musicVolume = musicVolume;
         info.soundEffectsVolume = soundEffectsVolume;
+        info.bigTextSize = bigTextSize;
+        info.middleTextSize = middleTextSize;
+        info.smallTextSize = smallTextSize;
 
         return info;
     }
@@ -28,5 +32,19 @@ public static class SettingsInfo
         playForIncome = info.playForIncome;
         musicVolume = info.musicVolume;
         soundEffectsVolume = info.soundEffectsVolume;
+        bigTextSize = info.bigTextSize;
+        middleTextSize = info.middleTextSize;
+        smallTextSize = info.smallTextSize;
+    }
+
+    public static void basicSettings()
+    {
+        playMusicForMainButton = false;
+        playForIncome = false;
+        musicVolume = 1f;
+        soundEffectsVolume = 1f;
+        bigTextSize = 33;
+        middleTextSize = 23;
+        smallTextSize = 21;
     }
 }

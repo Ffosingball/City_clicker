@@ -387,12 +387,18 @@ public class UIManager : MonoBehaviour
     {
         text1.text = "Every craft house will give income "+Balance.outputCostCorrectly(passiveIncomeManager.getIncomeCraft())+" every "+Math.Round(passiveIncomeManager.periodInSecondsCraft,1)+" seconds.";
         text2.text = "Craft houses are buildings where artisans make their job!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void farmHouseText(Text text1, Text text2)
     {
         text1.text = "Every farm will give income "+Balance.outputCostCorrectly(passiveIncomeManager.getIncomeFarm())+" every "+Math.Round(passiveIncomeManager.periodInSecondsFarm,1)+" seconds.";
         text2.text = "Farms are buildings where most of the habitats are working!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void houseText(Text text1, Text text2)
@@ -408,6 +414,9 @@ public class UIManager : MonoBehaviour
         text1.text=finalText;
         
         text2.text = "Houses for single families for welthier habitats!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void bigHouseText(Text text1, Text text2)
@@ -423,41 +432,62 @@ public class UIManager : MonoBehaviour
         text1.text=finalText;
         
         text2.text = "The simplest buildings where live several families!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void craftUpgradeText(Text text1, Text text2)
     {
         text1.text = "This upgrade will alternately increase base income for every craft house by "+((passiveIncomeManager.craftAmountMultiplier-1)*100)+"% and decrease downtime between incomes by "+((passiveIncomeManager.craftTimeDecrease)*100)+"%.";
         text2.text = "Maximizing efficiency of the artisans!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void farmUpgradeText(Text text1, Text text2)
     {
         text1.text = "This upgrade will alternately increase base income for every farm by "+((passiveIncomeManager.farmAmountMultiplier-1)*100)+"% and decrease downtime between incomes by "+((passiveIncomeManager.farmTimeDecrease)*100)+"%.";
         text2.text = "Maximizing efficiency of the crops!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void decreaseCost1Text(Text text1, Text text2)
     {
         text1.text = "This upgrade will decrease cost of big houses by "+upgradeBuildingsmanager.decreaseCostBy+" times.";
         text2.text = "Fighting with inflation!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void decreaseCost2Text(Text text1, Text text2)
     {
         text1.text = "This upgrade will decrease cost of houses by "+upgradeBuildingsmanager.decreaseCostBy+" times.";
         text2.text = "Fighting with inflation!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void increaseIncome1Text(Text text1, Text text2)
     {
         text1.text = "Base income for every farm is increased per "+Balance.outputCostCorrectly(upgradeBuildingsmanager.increaseIncomePerBigHouseBy)+" by every big house.";
         text2.text = "Fighting with unemployment!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 
     public void increaseIncome2Text(Text text1, Text text2)
     {
         text1.text = "Base income for every craft is increased per "+Balance.outputCostCorrectly(upgradeBuildingsmanager.increaseIncomePerHouseBy)+" by every house.";
         text2.text = "Fighting with unemployment!";
+
+        text1.fontSize = SettingsInfo.smallTextSize;
+        text2.fontSize = SettingsInfo.smallTextSize;
     }
 }

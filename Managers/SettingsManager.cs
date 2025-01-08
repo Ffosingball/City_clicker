@@ -7,15 +7,18 @@ using System;
 public class SettingsManager : MonoBehaviour
 {
     public GameObject settingsPanel;
-    public Button saveSettings;
+    public GameObject[] otherPanels;
     public Toggle toggleIncomeSound, toggleMainButton;
     public Slider sliderMusic, sliderSound;
-    public Text textSliderMusic, textSliderSound;
+    public Text textSliderMusic, textSliderSound, bigTextSize, middleTextSize, smallTextSize;
     public SavesManager savesManager;
     public SoundManager soundManager;
+    public Button[] chooseSettingsBut, saveSettings;
+    public UIScaler uiScaler;
 
     private bool settingsChanged=false, isInitialized = false;
     private SettingsInfoKeeper infoBeforeChange;
+    private int currentPanelChoosed=0;
 
 
     private void Start()
@@ -23,15 +26,16 @@ public class SettingsManager : MonoBehaviour
         savesManager.LoadSettings();
 
         resetSoundSettingsUI();
+        resetUISettingsUI();
     }
 
 
     private void Update() 
     {
         if(settingsChanged)
-            saveSettings.interactable = true;
+            saveSettings[currentPanelChoosed].interactable = true;
         else
-            saveSettings.interactable = false;
+            saveSettings[currentPanelChoosed].interactable = false;
     }
 
     
@@ -59,6 +63,13 @@ public class SettingsManager : MonoBehaviour
         isInitialized = true;
     }
 
+    public void resetUISettingsUI()
+    {
+        bigTextSize.text = SettingsInfo.bigTextSize.ToString();
+        middleTextSize.text = SettingsInfo.middleTextSize.ToString();
+        smallTextSize.text = SettingsInfo.smallTextSize.ToString();
+    }
+
 
     public void openSettingsScreen()
     {
@@ -67,7 +78,50 @@ public class SettingsManager : MonoBehaviour
         settingsChanged=false;
         settingsPanel.SetActive(true);
         soundManager.PlayClickSound();
+        otherPanels[currentPanelChoosed].SetActive(false);
+        currentPanelChoosed=0;
+        otherPanels[currentPanelChoosed].SetActive(true);
+        ResetButtonColor();
+        ModifyOutline(chooseSettingsBut[currentPanelChoosed]);
     }
+
+
+    public void openSoundSettings()
+    {
+        soundManager.PlayClickSound();
+
+        if(settingsChanged)
+        {
+            SettingsInfo.setNewSettings(infoBeforeChange);
+            resetSoundSettingsUI();
+        }
+
+        otherPanels[currentPanelChoosed].SetActive(false);
+        currentPanelChoosed=0;
+        otherPanels[currentPanelChoosed].SetActive(true);
+        ResetButtonColor();
+        ModifyOutline(chooseSettingsBut[currentPanelChoosed]);
+    }
+
+    public void openUISettings()
+    {
+        soundManager.PlayClickSound();
+
+        if(settingsChanged)
+        {
+            SettingsInfo.setNewSettings(infoBeforeChange);
+            resetUISettingsUI();
+        }
+
+        otherPanels[currentPanelChoosed].SetActive(false);
+        currentPanelChoosed=1;
+        otherPanels[currentPanelChoosed].SetActive(true);
+        ResetButtonColor();
+        ModifyOutline(chooseSettingsBut[currentPanelChoosed]);
+
+
+    }
+
 
     public void closeSettingsScreen()
     {
@@ -76,7 +130,6 @@ public class SettingsManager : MonoBehaviour
         if(settingsChanged)
         {
             SettingsInfo.setNewSettings(infoBeforeChange);
-            resetSoundSettingsUI();
         }
 
         settingsPanel.SetActive(false);
@@ -171,5 +224,90 @@ public class SettingsManager : MonoBehaviour
         savesManager.SaveSettings();
         settingsChanged=false;
         infoBeforeChange = SettingsInfo.getAllInfo();
+    }
+
+
+
+    public void ResetButtonColor()
+    {
+        foreach(Button button in chooseSettingsBut)
+        {
+            button.GetComponent<Outline>().enabled=false;
+        }
+    }
+
+
+    //Switch on the outline of the button
+    private void ModifyOutline(Button button)
+    {
+        var outline = button.GetComponent<Outline>().enabled=true;
+    }
+
+
+
+    public void increaseBigTextSize()
+    {
+        SettingsInfo.bigTextSize++;
+        bigTextSize.text = SettingsInfo.bigTextSize.ToString();
+        uiScaler.ResizeUI();
+
+        settingsChanged=true;
+        soundManager.PlayChangeValueSound();
+        //Debug.Log("Changed");
+    }
+
+    public void decreaseBigTextSize()
+    {
+        SettingsInfo.bigTextSize--;
+        bigTextSize.text = SettingsInfo.bigTextSize.ToString();
+        uiScaler.ResizeUI();
+
+        settingsChanged=true;
+        soundManager.PlayChangeValueSound();
+        //Debug.Log("Changed");
+    }
+
+    public void increaseMiddleTextSize()
+    {
+        SettingsInfo.middleTextSize++;
+        middleTextSize.text = SettingsInfo.middleTextSize.ToString();
+        uiScaler.ResizeUI();
+
+        settingsChanged=true;
+        soundManager.PlayChangeValueSound();
+        //Debug.Log("Changed");
+    }
+
+    public void decreaseMiddleTextSize()
+    {
+        SettingsInfo.middleTextSize--;
+        middleTextSize.text = SettingsInfo.middleTextSize.ToString();
+        uiScaler.ResizeUI();
+
+        settingsChanged=true;
+        soundManager.PlayChangeValueSound();
+        //Debug.Log("Changed");
+    }
+
+    public void increaseSmallTextSize()
+    {
+        SettingsInfo.smallTextSize++;
+        smallTextSize.text = SettingsInfo.smallTextSize.ToString();
+        uiScaler.ResizeUI();
+
+        settingsChanged=true;
+        soundManager.PlayChangeValueSound();
+        //Debug.Log("Changed");
+    }
+
+    public void decreaseSmallTextSize()
+    {
+        SettingsInfo.smallTextSize--;
+        smallTextSize.text = SettingsInfo.smallTextSize.ToString();
+        uiScaler.ResizeUI();
+
+        settingsChanged=true;
+        soundManager.PlayChangeValueSound();
+        //Debug.Log("Changed");
     }
 }
