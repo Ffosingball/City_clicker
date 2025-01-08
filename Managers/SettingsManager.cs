@@ -39,13 +39,13 @@ public class SettingsManager : MonoBehaviour
     {
         isInitialized = false;
 
-        Debug.Log("MainButton "+SettingsInfo.playMusicForMainButton);
+        //Debug.Log("MainButton "+SettingsInfo.playMusicForMainButton);
         if(SettingsInfo.playMusicForMainButton)
             toggleMainButton.isOn = true;
         else
             toggleMainButton.isOn = false;
         
-        Debug.Log("Income "+SettingsInfo.playForIncome);
+        //Debug.Log("Income "+SettingsInfo.playForIncome);
         if(SettingsInfo.playForIncome)
             toggleIncomeSound.isOn = true;
         else
@@ -104,7 +104,7 @@ public class SettingsManager : MonoBehaviour
 
         settingsChanged=true;
         soundManager.PlayClickSound();
-        Debug.Log("Checked");
+        //Debug.Log("Checked");
     }
 
     public void onCheckIncomeSound()
@@ -128,7 +128,7 @@ public class SettingsManager : MonoBehaviour
 
         settingsChanged=true;
         soundManager.PlayClickSound();
-        Debug.Log("Checked");
+        //Debug.Log("Checked");
     }
 
     public void onMusicVolumeChange()
@@ -145,7 +145,7 @@ public class SettingsManager : MonoBehaviour
 
         settingsChanged=true;
         soundManager.PlayChangeValueSound();
-        Debug.Log("Changed");
+        //Debug.Log("Changed");
     }
 
     public void onSoundVolumeChange()
@@ -162,7 +162,7 @@ public class SettingsManager : MonoBehaviour
 
         settingsChanged=true;
         soundManager.PlayChangeValueSound();
-        Debug.Log("Changed");
+        //Debug.Log("Changed");
     }
 
     public void saveSettingsNow()

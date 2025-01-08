@@ -6,8 +6,7 @@ using System;
 public class MapGenerator : MonoBehaviour
 {
     //Dictionary of all nature objects
-    public List<GameObject> allNatureObjects;
-    public List<Structure> allNatureStructures;
+    public Dictionary<GameObject, Structure> allNatureStructures;
     public StructureNatureWeighted[] natureStructures;
 
     public int width, height, minAmountOfNature, maxAmountOfNature;
@@ -15,8 +14,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Start() 
     {
-        allNatureStructures = new List<Structure>();
-        allNatureObjects = new List<GameObject>();
+        allNatureStructures = new Dictionary<GameObject, Structure>();
         generateNature();
     }
 
@@ -44,10 +42,12 @@ public class MapGenerator : MonoBehaviour
                 position.y=y;
                 position.z=position.y+505;
 
+                if(position.z<0)
+                    position.z=1;
+
                 GameObject natureStructure = Instantiate(objects.prefab, position, Quaternion.identity);
                 natureStructure.transform.SetParent(transform);
-                allNatureStructures.Add(new Structure(x,y,"Nature",index));
-                allNatureObjects.Add(natureStructure);
+                allNatureStructures.Add(natureStructure, new Structure(x,y,"Nature",index));
             }
 
             index++;
@@ -57,19 +57,23 @@ public class MapGenerator : MonoBehaviour
 
     public void resetNature(GameData data)
     {
-        foreach(GameObject nObject in allNatureObjects)
+        foreach(KeyValuePair<GameObject, Structure> nObject in allNatureStructures)
         {
-            Destroy(nObject);
+            Destroy(nObject.Key);
         }
-        allNatureObjects.Clear();
+        allNatureStructures.Clear();
 
-        allNatureStructures = data.natureObjects;
+        List<Structure> tempList = data.natureObjects;
 
-        foreach(Structure newNature in allNatureStructures)
+        foreach(Structure newNature in tempList)
         {
-            GameObject natureStructure = Instantiate(natureStructures[newNature.getStructNum()].prefab, new Vector3(newNature.getX(),newNature.getY(),newNature.getY()+505), Quaternion.identity);
+            int z = newNature.getY()+505;
+            if(z<0)
+                    z=1;
+
+            GameObject natureStructure = Instantiate(natureStructures[newNature.getStructNum()].prefab, new Vector3(newNature.getX(),newNature.getY(),z), Quaternion.identity);
             natureStructure.transform.SetParent(transform);
-            allNatureObjects.Add(natureStructure);
+            allNatureStructures.Add(natureStructure, newNature);
         }
     }
 }

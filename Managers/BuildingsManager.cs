@@ -29,6 +29,7 @@ public class BuildingsManager : MonoBehaviour
     public GameObject[] farmingBuildings;
     public PassiveIncomeManager passiveIncomeManager;
     public SoundManager soundManager;
+    public MapGenerator mapGenerator;
 
     private void Start()
     {
@@ -212,7 +213,7 @@ public class BuildingsManager : MonoBehaviour
             }
         }
 
-        DestroyNatureAt(new Vector3Int(x,y,y+maxHeight));
+        DestroyNatureAt(new Vector2(x,y));
 
         return newHouse;
     }
@@ -505,16 +506,25 @@ public class BuildingsManager : MonoBehaviour
     }
 
 
-    private void DestroyNatureAt(Vector3Int position)
+    private void DestroyNatureAt(Vector2 position)
     {
-        //This code create box 1 by 1 by 1 at specific position and check if any GameObject
-        //with specific layer inside this box
-        RaycastHit[] hits = Physics.BoxCastAll((Vector3)position + new Vector3(0,0.5f,0),new Vector3(20f,20f,20f),transform.up,Quaternion.identity,1f,1<<LayerMask.NameToLayer("Nature"));
+        /*
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(
+        (Vector2)position + new Vector2(0, 0.5f),
+        new Vector2(20f, 20f), // размеры коробки
+        0f,                    // угол поворота коробки
+        Vector2.up,            // направление кастинга (вверх)
+        1f,                    // дистанция кастинга
+        LayerMask.GetMask("Nature") // слой, с которым проверяем столкновения
+        );*/
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(position, new Vector2(40f, 40f), 0f, Vector2.up, 1f, LayerMask.GetMask("Nature"));
         
         //Destroy all founded nature
         foreach(var item in hits)
         {
+            mapGenerator.allNatureStructures.Remove(item.collider.gameObject);
             Destroy(item.collider.gameObject);
+            //Debug.Log("Nature removed");
         }
     }
 }

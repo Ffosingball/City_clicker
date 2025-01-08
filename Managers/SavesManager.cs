@@ -58,7 +58,6 @@ public class SavesManager : MonoBehaviour
         GameData data = new GameData(Balance.getBalance(), Balance.getAdder(), Balance.getAmountToMultiply());
 
         List<RoadStructure> tempRoadList = new List<RoadStructure>();
-        //if()
         foreach(KeyValuePair<string, List<RoadStructure>> roadStructures in buildingsManager.allRoadsList)
         {
             foreach(RoadStructure road in roadStructures.Value)
@@ -68,13 +67,17 @@ public class SavesManager : MonoBehaviour
         }
 
         data.setBuildingsLists(buildingsManager.allBuildings, tempRoadList, buildingsManager.allPassiveIncomesBuilds);
-    
-        //Debug.Log("Length: "+data.getUsualBuildingsList().Count);
-
         data.setBuildingsInfo(buildingsManager.houseCost,buildingsManager.bigHouseCost,buildingsManager.farmCost,buildingsManager.craftCost,upgradeBuildingsManager.farmUpgrades,upgradeBuildingsManager.craftUpgrades,buildingsManager.numOfBigHouses,buildingsManager.numOfHouses,buildingsManager.numOfFarms,buildingsManager.numOfCraft);
         data.setUpgradeInfo(upgradeBuildingsManager.incomeIncreased1,upgradeBuildingsManager.incomeIncreased2,upgradeBuildingsManager.costDecreased1,upgradeBuildingsManager.costDecreased2,upgradeBuildingsManager.farmUpgradeCost,upgradeBuildingsManager.craftUpgradeCost);
         data.setPassiveIncomeInfo(passiveIncomeManager.currentAdderFarm,passiveIncomeManager.farmMultipleAmount,passiveIncomeManager.periodInSecondsFarm,passiveIncomeManager.currentAdderCraft,passiveIncomeManager.craftMultipleAmount,passiveIncomeManager.periodInSecondsCraft);
-        data.setNatureObjectsInfo(mapGenerator.allNatureStructures);
+        
+        List<Structure> tempNatureObjects = new List<Structure>();
+        foreach(KeyValuePair<GameObject, Structure> natureStructures in mapGenerator.allNatureStructures)
+        {
+            tempNatureObjects.Add(natureStructures.Value);
+        }
+        
+        data.setNatureObjectsInfo(tempNatureObjects);
     
         SaveSystem.SaveGame(saveNumber, data);
         SaveSystem.SaveNames(saveNames);
