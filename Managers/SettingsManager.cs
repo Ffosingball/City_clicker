@@ -133,6 +133,8 @@ public class SettingsManager : MonoBehaviour
         }
 
         settingsPanel.SetActive(false);
+        uiScaler.ResizeUI();
+        soundManager.updateMusciVolume(SettingsInfo.musicVolume);
     }
 
 

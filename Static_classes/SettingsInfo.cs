@@ -43,8 +43,8 @@ public static class SettingsInfo
         playForIncome = false;
         musicVolume = 1f;
         soundEffectsVolume = 1f;
-        bigTextSize = 33;
-        middleTextSize = 23;
-        smallTextSize = 21;
+        bigTextSize = 22;
+        middleTextSize = 14;
+        smallTextSize = 25;
     }
 }
