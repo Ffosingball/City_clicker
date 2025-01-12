@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MovementManager : MonoBehaviour
 {
@@ -15,12 +16,13 @@ public class MovementManager : MonoBehaviour
     public float movementDivider=6f;
     public float movementDividerPhone=6f;
     private Vector3 lastTouchPosition;
-    private bool isDragging;
+    [HideInInspector]
+    public bool isDragging;
 
     private void Update()
     {
 
-        if (Input.touchCount == 1)
+        if (Input.touchCount == 1 && !IsPointerOverUIObject())
         {
             Touch touch = Input.GetTouch(0);
 
@@ -48,7 +50,7 @@ public class MovementManager : MonoBehaviour
                 isDragging = false;
             }
         }
-        else if (Input.touchCount == 2)
+        else if (Input.touchCount == 2 && !IsPointerOverUIObject())
         {
             Touch touch0 = Input.GetTouch(0);
             Touch touch1 = Input.GetTouch(1);
@@ -79,7 +81,7 @@ public class MovementManager : MonoBehaviour
         }
 
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !IsPointerOverUIObject())
         {
             lastTouchPosition = Input.mousePosition;
             isDragging = true;
@@ -104,5 +106,28 @@ public class MovementManager : MonoBehaviour
         {
             isDragging = false;
         }
+    }
+
+
+    private bool IsPointerOverUIObject()
+    {
+        // For mouse
+        if (EventSystem.current.IsPointerOverGameObject())
+            return true;
+
+        // For touch input
+        if (Input.touchCount > 1)
+        {
+            Touch touch1 = Input.GetTouch(0);
+            Touch touch2 = Input.GetTouch(1);
+            return EventSystem.current.IsPointerOverGameObject(touch1.fingerId) && EventSystem.current.IsPointerOverGameObject(touch2.fingerId);
+        }
+        else if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            return EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+        }
+
+        return false;
     }
 }

@@ -12,6 +12,7 @@ public class ClickButtonBehaviour : MonoBehaviour
     public float textSpeedMovement=50, textDistanceMove=100, interval=1f;
     public SavesManager savesManager;
     public SoundManager soundManager;
+    public MovementManager movementManager;
     private int clicks=0;
     private float timePassed=0;
 
@@ -85,8 +86,14 @@ public class ClickButtonBehaviour : MonoBehaviour
         while(distanceMoved<textDistanceMove)
         {
             movingTextCur.transform.Translate(new Vector3(0,1,0)*textSpeedMovement*Time.deltaTime);
-            yield return null; 
-            distanceMoved+=1*textSpeedMovement*Time.deltaTime;
+
+            if(!movementManager.isDragging)
+            {
+                yield return null; 
+                distanceMoved+=1*textSpeedMovement*Time.deltaTime;
+            }
+            else
+                break;
         }
         Destroy(movingTextCur);
     }
