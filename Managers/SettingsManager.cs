@@ -15,6 +15,7 @@ public class SettingsManager : MonoBehaviour
     public SoundManager soundManager;
     public Button[] chooseSettingsBut, saveSettings;
     public UIScaler uiScaler;
+    public Sprite choosedButton, normalButton;
 
     private bool settingsChanged=false, isInitialized = false;
     private SettingsInfoKeeper infoBeforeChange;
@@ -234,7 +235,7 @@ public class SettingsManager : MonoBehaviour
     {
         foreach(Button button in chooseSettingsBut)
         {
-            button.GetComponent<Outline>().enabled=false;
+            button.image.sprite = normalButton;
         }
     }
 
@@ -242,7 +243,7 @@ public class SettingsManager : MonoBehaviour
     //Switch on the outline of the button
     private void ModifyOutline(Button button)
     {
-        var outline = button.GetComponent<Outline>().enabled=true;
+        button.image.sprite = choosedButton;
     }
 
 

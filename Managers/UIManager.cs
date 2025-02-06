@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     public Text[] saveNloadText;
     [HideInInspector]
     public Action<Text,Text>[] textToShow;
+    public Sprite choosedButton, normalButton;
     private int saveChoosed=-1;
 
 
@@ -273,18 +274,14 @@ public class UIManager : MonoBehaviour
     {
         foreach(Button button in saveBut)
         {
-            button.GetComponent<Outline>().enabled=false;
+            button.image.sprite = normalButton;
         }
     }
 
-
-    //Switch on the outline of the button
     private void ModifyOutline(Button button)
     {
-        var outline = button.GetComponent<Outline>().enabled=true;
+        button.image.sprite = choosedButton;
     }
-
-
 
 
 

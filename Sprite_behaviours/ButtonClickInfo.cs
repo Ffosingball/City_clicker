@@ -14,6 +14,7 @@ public class ButtonClickInfo : MonoBehaviour
     public UIManager uIManager;
     public SoundManager soundManager;
     private Text importantText=null, otherText=null;
+    public MovementManager movementManager;
     private bool isShown=false;
 
 
@@ -42,17 +43,21 @@ public class ButtonClickInfo : MonoBehaviour
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
             if(showAbove)
             {
-                worldPosition.x=worldPosition.x+width/2+20;
-                worldPosition.y=worldPosition.y+height/2+20;
+                worldPosition.x=worldPosition.x+((width/2)*(movementManager.currentOrthographicSize/600)+10);
+                worldPosition.y=worldPosition.y+((height/2)*(movementManager.currentOrthographicSize/600)+10);
             }
             else
             {
-                worldPosition.x=worldPosition.x+width/2+20;
-                worldPosition.y=worldPosition.y-height/2-20;
+                worldPosition.x=worldPosition.x+((width/2)*(movementManager.currentOrthographicSize/600)+10);
+                worldPosition.y=worldPosition.y-((height/2)*(movementManager.currentOrthographicSize/600)-10);
             }
 
-            if(gameObject==null)
+            if(gameObject==null){
                 gameObject = Instantiate(infoPanelToShow, worldPosition, Quaternion.Euler(0,0,0));
+                InfoPanelResizer l = gameObject.GetComponent<InfoPanelResizer>();
+                l.movementManager=movementManager;
+                l.resize();
+            }
             else
                 gameObject.transform.position = worldPosition;
 

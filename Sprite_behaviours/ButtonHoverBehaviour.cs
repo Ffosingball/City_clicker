@@ -12,6 +12,7 @@ public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointe
     public bool showAbove=true;
     public int numOfTextToShow=-1;
     public UIManager uIManager;
+    public MovementManager movementManager;
     private Text importantText=null, otherText=null;
     private float timePassed=0;
 
@@ -42,17 +43,26 @@ public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointe
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(mousePosition);
             if(showAbove)
             {
-                worldPosition.x=worldPosition.x+width/2+20;
-                worldPosition.y=worldPosition.y+height/2+20;
+                worldPosition.x=worldPosition.x+((width/2)*(movementManager.currentOrthographicSize/600)+10);
+                worldPosition.y=worldPosition.y+((height/2)*(movementManager.currentOrthographicSize/600)+10);
+                Debug.Log(20*(movementManager.currentOrthographicSize/600));
             }
             else
             {
-                worldPosition.x=worldPosition.x+width/2+20;
-                worldPosition.y=worldPosition.y-height/2-20;
+                worldPosition.x=worldPosition.x+((width/2)*(movementManager.currentOrthographicSize/600)+10);
+                worldPosition.y=worldPosition.y-((height/2)*(movementManager.currentOrthographicSize/600)-10);
+                Debug.Log(20*(movementManager.currentOrthographicSize/600));
             }
 
             if(gameObject==null)
+            {
                 gameObject = Instantiate(infoPanelToShow, worldPosition, Quaternion.Euler(0,0,0));
+                //Debug.Log("Created");
+                InfoPanelResizer l = gameObject.GetComponent<InfoPanelResizer>();
+                l.movementManager=movementManager;
+                l.resize();
+                //Debug.Log("Assigned");
+            }
             else
                 gameObject.transform.position = worldPosition;
 
