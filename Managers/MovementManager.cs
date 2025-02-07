@@ -18,7 +18,7 @@ public class MovementManager : MonoBehaviour
     public float currentOrthographicSize=600f;
     private Vector3 lastTouchPosition;
     [HideInInspector]
-    public bool isDragging;
+    public bool isDragging, isZooming;
 
     private void Update()
     {
@@ -53,6 +53,8 @@ public class MovementManager : MonoBehaviour
         }
         else if (Input.touchCount == 2 && !IsPointerOverUIObject())
         {
+            isZooming = true;
+
             Touch touch0 = Input.GetTouch(0);
             Touch touch1 = Input.GetTouch(1);
 
@@ -77,9 +79,14 @@ public class MovementManager : MonoBehaviour
         }
         else if (Input.mouseScrollDelta.y != 0)
         {
+            isZooming = true;
             camera.orthographicSize -= Input.mouseScrollDelta.y * zoomSpeed * 10f;
             camera.orthographicSize = Mathf.Clamp(camera.orthographicSize, minZoom, maxZoom);
             //Debug.Log(currentOrthographicSize);
+        }
+        else
+        {
+            isZooming = false;
         }
 
         currentOrthographicSize = camera.orthographicSize;

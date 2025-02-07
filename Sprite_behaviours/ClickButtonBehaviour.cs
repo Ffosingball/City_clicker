@@ -61,10 +61,11 @@ public class ClickButtonBehaviour : MonoBehaviour
         RectTransform rectTransform = mainButton.GetComponent<RectTransform>();
         Vector3 worldCenter = rectTransform.TransformPoint(rectTransform.rect.center);
         worldCenter.z=0.09f;
-        worldCenter.y+=yOffset;
-        worldCenter.x+=xOffset;
+        worldCenter.y+=yOffset*(movementManager.currentOrthographicSize/600);
+        worldCenter.x+=xOffset*(movementManager.currentOrthographicSize/600);
 
         GameObject movingTextCur = Instantiate(movingText, worldCenter, Quaternion.Euler(0f,0f,0f));
+        movingTextCur.transform.localScale = new Vector3(1f,1f,1f)*(movementManager.currentOrthographicSize/600);
         //Find child gameObject of the created gameObject by its name
         GameObject childCanva = movingTextCur.transform.Find("MovingText").gameObject;
         //And again
@@ -83,14 +84,17 @@ public class ClickButtonBehaviour : MonoBehaviour
     private IEnumerator moveText(GameObject movingTextCur)
     {
         double distanceMoved=0;
-        while(distanceMoved<textDistanceMove)
+        //Debug.Log(textDistanceMove*(movementManager.currentOrthographicSize/600));
+        //Debug.Log(1*textSpeedMovement*Time.deltaTime*(movementManager.currentOrthographicSize/600));
+        while(distanceMoved<textDistanceMove*(movementManager.currentOrthographicSize/600))
         {
-            movingTextCur.transform.Translate(new Vector3(0,1,0)*textSpeedMovement*Time.deltaTime);
+            movingTextCur.transform.Translate(new Vector3(0,1,0)*textSpeedMovement*Time.deltaTime*(movementManager.currentOrthographicSize/600));
+            movingTextCur.transform.localScale = new Vector3(1f,1f,1f)*(movementManager.currentOrthographicSize/600);
 
-            if(!movementManager.isDragging)
+            if(!movementManager.isDragging && !movementManager.isZooming)
             {
                 yield return null; 
-                distanceMoved+=1*textSpeedMovement*Time.deltaTime;
+                distanceMoved+=1*textSpeedMovement*Time.deltaTime*(movementManager.currentOrthographicSize/600);
             }
             else
                 break;

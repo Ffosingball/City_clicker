@@ -265,7 +265,7 @@ public class UIManager : MonoBehaviour
     {
         foreach(Button button in loadsBut)
         {
-            button.GetComponent<Outline>().enabled=false;
+            button.image.sprite = normalButton;
         }
     }
 
@@ -298,6 +298,7 @@ public class UIManager : MonoBehaviour
         savesManager.LoadFrom(saveChoosed);
         saveChoosed=-1;
         warningPanel.SetActive(false);
+        ResetButtonColorLoad();
     }
 
     public void noLoad()
@@ -324,6 +325,7 @@ public class UIManager : MonoBehaviour
         savesManager.SaveTo(saveChoosed);
         saveChoosed=-1;
         rewritePanel.SetActive(false);
+        ResetButtonColorSave();
     }
 
     public void noSave()
@@ -344,6 +346,8 @@ public class UIManager : MonoBehaviour
         savesManager.deleteSave(saveChoosed);
         saveChoosed=-1;
         deleteWarningPanel.SetActive(false);
+        ResetButtonColorSave();
+        ResetButtonColorLoad();
     }
 
     public void noDelete()

@@ -13,6 +13,7 @@ public class MainMenuManager : MonoBehaviour
     public Button mainLoadBut;
     public SavesManager savesManager;
     public SoundManager soundManager;
+    public Sprite choosedButton, normalButton;
     private int saveChoosed;
 
 
@@ -133,7 +134,7 @@ public class MainMenuManager : MonoBehaviour
     {
         foreach(Button button in saveBut)
         {
-            button.GetComponent<Outline>().enabled=false;
+            button.image.sprite = normalButton;
         }
     }
 
@@ -141,6 +142,6 @@ public class MainMenuManager : MonoBehaviour
     //Switch on the outline of the button
     private void ModifyOutline(Button button)
     {
-        var outline = button.GetComponent<Outline>().enabled=true;
+        button.image.sprite = choosedButton;
     }
 }

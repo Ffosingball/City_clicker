@@ -45,13 +45,13 @@ public class ButtonHoverBehaviour : MonoBehaviour, IPointerEnterHandler, IPointe
             {
                 worldPosition.x=worldPosition.x+((width/2)*(movementManager.currentOrthographicSize/600)+10);
                 worldPosition.y=worldPosition.y+((height/2)*(movementManager.currentOrthographicSize/600)+10);
-                Debug.Log(20*(movementManager.currentOrthographicSize/600));
+                //Debug.Log(20*(movementManager.currentOrthographicSize/600));
             }
             else
             {
                 worldPosition.x=worldPosition.x+((width/2)*(movementManager.currentOrthographicSize/600)+10);
                 worldPosition.y=worldPosition.y-((height/2)*(movementManager.currentOrthographicSize/600)-10);
-                Debug.Log(20*(movementManager.currentOrthographicSize/600));
+                //Debug.Log(20*(movementManager.currentOrthographicSize/600));
             }
 
             if(gameObject==null)
