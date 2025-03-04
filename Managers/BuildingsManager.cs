@@ -19,7 +19,7 @@ public class BuildingsManager : MonoBehaviour
     public int numOfHouses=0, numOfBigHouses=0, numOfCraft=0, numOfFarms;
     public float costMultiplier=1.8f, adderIncrease=1, multiplier=1.15f, probabilityOfCreatingARoad=0.95f, probabilityOfCreatingAddRoad=0.1f;
     public int leastAmountOfBuildingsToCreateAddRoad=10, maxWidth=950, maxHeight=550, middleWidth=670, middleheight=370, smallWidth=300, smallHeight=150, farmWidth=130, farmHeight=100, farmWdisplacement=15, farmHdisplacement=10;
-    public float houseCost=20, bigHouseCost=40, craftCost=80, roadLength=5, farmCost;
+    public float houseCost=20, bigHouseCost=40, craftCost=80, roadLength=5, farmCost, maxNumberOfRoads=45;
     public Text houseText, bigHouseText, craftText, farmText, numOfHousesText, numOfBigHousesText, numOfCraftHousesText, numOfFarmsText;
     public Button houseButton, bigHouseButton, craftButton, farmButton;
     public GameObject[] houses;
@@ -137,10 +137,10 @@ public class BuildingsManager : MonoBehaviour
     }
 
 
-    public void decreseCostHouse(float decreaseBy)
+    public void decreseCostFarm(float decreaseBy)
     {
-        houseCost/=decreaseBy;
-        houseText.text=""+Balance.outputCostCorrectly(houseCost);
+        farmCost/=decreaseBy;
+        farmText.text=""+Balance.outputCostCorrectly(farmCost);
     }
 
 
@@ -257,7 +257,7 @@ public class BuildingsManager : MonoBehaviour
 
     private void createRoadStructure(int index1)
     {
-        if(allBuildings.Count>1)
+        if(allBuildings.Count>1 && allRoadsList.Count<maxNumberOfRoads)
         {
             int index2=findTheClosest(index1);
 
@@ -269,7 +269,7 @@ public class BuildingsManager : MonoBehaviour
 
     private void createRoadStructure(int index1, int index2)
     {
-        if(!allRoadsList.ContainsKey(index1+","+index2+"") && !allRoadsList.ContainsKey(index2+","+index1+""))
+        if(!allRoadsList.ContainsKey(index1+","+index2+"") && !allRoadsList.ContainsKey(index2+","+index1+"")  && allRoadsList.Count<maxNumberOfRoads)
         {
             //Debug.Log("Additional Road!");
             createRoad(allBuildings[index1].getX(), allBuildings[index1].getY(), allBuildings[index2].getX(), allBuildings[index2].getY(),index1,index2);

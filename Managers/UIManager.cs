@@ -395,7 +395,12 @@ public class UIManager : MonoBehaviour
 
     public void farmHouseText(Text text1, Text text2)
     {
-        text1.text = "Every farm will give income "+Balance.outputCostCorrectly(passiveIncomeManager.getIncomeFarm())+" every "+Math.Round(passiveIncomeManager.periodInSecondsFarm,1)+" seconds.";
+        string finalText="Every farm will give income "+Balance.outputCostCorrectly(passiveIncomeManager.getIncomeFarm())+" every "+Math.Round(passiveIncomeManager.periodInSecondsFarm,1)+" seconds.";
+        
+        if(upgradeBuildingsmanager.costDecreased2)
+            finalText = finalText+" Additionally cost for this type of buildings has been decreased by "+Balance.outputCostCorrectly(upgradeBuildingsmanager.decreaseCostBy)+" times.";
+        
+        text1.text = finalText;
         text2.text = "Farms are buildings where most of the habitats are working!";
 
         text1.fontSize = SettingsInfo.smallTextSize;
@@ -408,9 +413,6 @@ public class UIManager : MonoBehaviour
 
         if(upgradeBuildingsmanager.incomeIncreased2)
             finalText = finalText+" Additionally base income for every craft is increased per "+Balance.outputCostCorrectly(upgradeBuildingsmanager.increaseIncomePerHouseBy)+" by every house.";
-        
-        if(upgradeBuildingsmanager.costDecreased1)
-            finalText = finalText+" Additionally cost for this type of buildings has been decreased by "+Balance.outputCostCorrectly(upgradeBuildingsmanager.decreaseCostBy)+" times.";
         
         text1.text=finalText;
         
@@ -467,7 +469,7 @@ public class UIManager : MonoBehaviour
 
     public void decreaseCost2Text(Text text1, Text text2)
     {
-        text1.text = "This upgrade will decrease cost of houses by "+upgradeBuildingsmanager.decreaseCostBy+" times.";
+        text1.text = "This upgrade will decrease cost of farms by "+upgradeBuildingsmanager.decreaseCostBy+" times.";
         text2.text = "Fighting with inflation!";
 
         text1.fontSize = SettingsInfo.smallTextSize;

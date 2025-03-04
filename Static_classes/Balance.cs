@@ -6,7 +6,7 @@ using System;
 static public class Balance
 {
     static private string[] powersOfTen = {"K","M","B","T","Q"};
-    static private float balance=0;
+    static private float balance=0, earnedByClicks=0, earnedPassively=0;
     static private float multiplier=1;
     static private float amountToMultiply=0;
     static private float adder=0;
@@ -15,9 +15,23 @@ static public class Balance
         return balance;
     }
 
+    static public float getEarnedByClicks(){
+        return earnedByClicks;
+    }
+
+    static public float getEarnedPassively(){
+        return earnedPassively;
+    }
+
+    static public void clearStatistics(){
+        earnedByClicks=0;
+        earnedPassively=0;
+    }
+
     static public float updateBalance(){
         float increaseBy=(1+adder)*(float)Math.Pow(multiplier, amountToMultiply);
         balance += increaseBy;
+        earnedByClicks += increaseBy;
         UIManager.updateText((float)Math.Round(balance));
         return increaseBy;
     }
@@ -31,8 +45,11 @@ static public class Balance
     static public void increaseBalance(float income)
     {
         if(income>0)
+        {
             balance+=income;
-        
+            earnedPassively+=income;
+        }
+
         UIManager.updateText((float)Math.Round(balance));
     }
 

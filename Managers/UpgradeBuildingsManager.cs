@@ -127,7 +127,7 @@ public class UpgradeBuildingsManager : MonoBehaviour
     {
         soundManager.PlayUpgradeSound();
         Balance.updateBalance(decreaseCost2);
-        buildingsManager.decreseCostHouse(decreaseCostBy);
+        buildingsManager.decreseCostFarm(decreaseCostBy);
         costDecreased2=true;
         decreaseCostText2.text = "Done!";
     }
